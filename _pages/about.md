@@ -5,6 +5,4 @@ header:
   image: "/images/about_pic.jpg"
 ---
 
-I'm a senior data scientist who excels at data wrangling, machine learning, exploratory analysis, and data visualizations.
-
-Etc, etc, etc
+Having solid background in Ecomomics and Machine Learning I'm passionate about Data Science and implementing cutting edge technologies for business needs and social good. 
