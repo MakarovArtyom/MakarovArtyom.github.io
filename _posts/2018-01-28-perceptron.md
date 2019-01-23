@@ -42,13 +42,13 @@ First we need to import all libraries we will use to manipulate dataframe, visua
 - seaborn - data visualization
 
 """
-    import pandas as pd
-    import seaborn as sns
-    import matplotlib.pyplot as plt
-    import numpy as np
-    from pandas.io import gbq
-    import boto3 # transfer file with data to S3 cloud
-    %matplotlib inline
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import numpy as np
+from pandas.io import gbq
+import boto3 # transfer file with data to S3 cloud
+%matplotlib inline
     
 """
 - dateteme module for time type convertation  
