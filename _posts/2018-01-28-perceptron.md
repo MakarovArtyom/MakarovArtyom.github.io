@@ -29,9 +29,8 @@ We will retrieve 2015 year data and load 2 millions rows into dataframe.
 
 ### Libraries import
 
-<details><summary>CLICK ME</summary>
-<p>
-  
+<details>
+  <summary>CLICK ME</summary>
   
  ```python
     import pandas as pd
@@ -43,8 +42,6 @@ We will retrieve 2015 year data and load 2 millions rows into dataframe.
 
 ```
 
-
-</p>
 </details>
 
 
