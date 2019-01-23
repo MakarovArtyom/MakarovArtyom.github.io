@@ -3,12 +3,15 @@ title: "Google BigQuery data -Taxi Fare Predictions"
 date: 2018-08-28
 tags: [data science, regression, xgboost]
 header:
-  image: "/images/perceptron/percept.jpg"
+  image: "https://github.com/MakarovArtyom/data-science-projects/blob/master/images/taxi_pic.jpg"
 excerpt: "Data Science, Regression, Xgboost"
 mathjax: "true"
 ---
 
-# H1 Heading
+# Introduction
+
+For this project we are going to use Google BigQuery data to predict the estimated fare amount of New York taxi rides. We aim to manipulate the dataset, prepare exploratory analysis, retreiving all the hidden patterns and variables relationships for creating machine learning models to offer expected fare.
+The major part is consentrated on data cleaning, visual component and fetaure engineering.
 
 ## H2 Heading
 
