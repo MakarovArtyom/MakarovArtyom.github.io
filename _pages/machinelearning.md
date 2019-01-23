@@ -1,6 +1,6 @@
 ---
 layout: posts
-permalink: /data-wrangling/
+permalink: /end-to-end-projects/
 title: "End-to-End projects"
 author_profile: true
 header:
