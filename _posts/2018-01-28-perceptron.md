@@ -3,7 +3,7 @@ title: "Google BigQuery data -Taxi Fare Predictions"
 date: 2018-08-28
 tags: [data science, regression, xgboost]
 header:
-  image: "images\taxi_pic.jpg"
+  image: "/images/taxi_pic.jpg"
 excerpt: "Data Science, Regression, Xgboost"
 mathjax: "true"
 ---
