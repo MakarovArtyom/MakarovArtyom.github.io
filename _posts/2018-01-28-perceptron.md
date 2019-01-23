@@ -1,10 +1,10 @@
 ---
-title: "Data Wrangling Project"
+title: "Google BigQuery data -Taxi Fare Predictions"
 date: 2018-01-28
-tags: [data wrangling, data science, messy data]
+tags: [data science, regression, xgboost]
 header:
   image: "/images/perceptron/percept.jpg"
-excerpt: "Data Wrangling, Data Science, Messy Data"
+excerpt: "Data Science, Regression, Xgboost"
 mathjax: "true"
 ---
 
