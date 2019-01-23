@@ -29,7 +29,9 @@ We will retrieve 2015 year data and load 2 millions rows into dataframe.
 
 ### Libraries import
 
-<details><summary>CLICK ME</summary> 
+First we need to import all libraries we will use to manipulate dataframe, visualize results and make predictions. 
+
+<details><summary>Python code</summary> 
   
 <p>
   
@@ -87,6 +89,46 @@ import xgboost as xgb
 ```
 </p>
 </details>
+
+### Data processing
+
+We start with collection data from Google BigQuery public dataset and writing this into .csv file. 
+Optionally we will store the file on AWS cloud. 
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+```python
+"""
+- loading data from big query project, write into frame 
+- automatically upload csv file to S3 storage 
+
+"""
+
+df = gbq.read_gbq('SELECT * FROM taxi.taxi_fare_2015 LIMIT 2000000', project_id='XXXXXXX')
+df.to_csv('fares_all.csv')
+
+ACCESS_ID = 'XXXXXX'
+ACCESS_KEY='XXXXXX'
+filename = 'fares_all.csv'
+bucket_name = 'storagebucketmachinelearning'
+
+
+s3 = boto3.client('s3', aws_access_key_id=ACCESS_ID,
+         aws_secret_access_key= ACCESS_KEY)
+s3.upload_file(filename, bucket_name, filename)
+
+# select the columns we need
+cols=['pickup_longitude', 'pickup_latitude', 'dropoff_longitude', 'dropoff_latitude',
+  'passenger_count', 'pickup_datetime', 'dropoff_datetime', 'fare_amount']
+df=df[cols]
+```
+
+</p>
+</details>
+
+
 
 ## H2 Heading
 
