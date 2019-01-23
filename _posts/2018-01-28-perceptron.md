@@ -14,7 +14,7 @@ For this project we are going to use Google BigQuery data to predict the estimat
 We aim to manipulate the dataset, prepare exploratory analysis, retreiving all the hidden patterns and variables relationships for creating machine learning models to offer expected fare.
 The major part is consentrated on data cleaning, visual component and fetaure engineering.
 
-#### The Data:
+### The Data:
 
 The data was collcted via Google BigQuery from "NYC TLC Trips" public dataset and contains information about NYC taxi trips details:
 
@@ -91,6 +91,7 @@ import xgboost as xgb
 </details>
 
 ### Data processing
+#### Step №1 - Data retrieving 
 
 We start with collection data from Google BigQuery public dataset and writing this into .csv file. 
 Optionally we will store the file on AWS cloud. 
@@ -133,11 +134,20 @@ Resulted dataframe is presented below:
 
 ![LSTM]({{ 'taxi_output/data_frame.PNG' | absolute_url }})
 
+#### Step №2 - Data cleaning
 
+Next we will drop NaN values from dataframe and make sure that our target variable, "fare amount", takes postive values. 
 
+ ```python
+"""
+- drop rows with negative and zero fare amount
+- drop NaN values 
 
-
-
+"""
+df=df[df['fare_amount']>0]
+df=df.dropna(how='any')
+df.isna().any()
+ ```
 
 
 
