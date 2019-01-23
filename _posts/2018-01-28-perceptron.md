@@ -29,9 +29,6 @@ We will retrieve 2015 year data and load 2 millions rows into dataframe.
 
 ### Libraries import
 
-<details>
-  <summary>CLICK ME</summary>
-  
  ```python
     import pandas as pd
     import seaborn as sns
@@ -41,8 +38,6 @@ We will retrieve 2015 year data and load 2 millions rows into dataframe.
     import boto3 # transfer file with data to S3 cloud
 
 ```
-
-</details>
 
 
 ## H2 Heading
