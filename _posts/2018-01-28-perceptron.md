@@ -29,18 +29,18 @@ We will retrieve 2015 year data and load 2 millions rows into dataframe.
 
 ### Libraries import
 
-<details><summary>CLICK ME</summary>
+<details>
+<summary>
+<i>Code</i>
 <p>
-  
 ```python
     import pandas as pd
     import seaborn as sns
     import matplotlib.pyplot as plt
     import numpy as np
     from pandas.io import gbq
-    import boto3 # transfer file with data to S3 cloud 
-
-    %matplotlib inline
+    import boto3 # transfer file with data to S3 cloud
+  %matplotlib inline
 ```
 </p>
 </details>
