@@ -29,10 +29,9 @@ We will retrieve 2015 year data and load 2 millions rows into dataframe.
 
 ### Libraries import
 
-<details>
-<summary>
-<i>Code</i>
+<details><summary>CLICK ME</summary>
 <p>
+ 
 ```python
     import pandas as pd
     import seaborn as sns
