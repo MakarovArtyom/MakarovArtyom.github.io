@@ -1,6 +1,6 @@
 ---
 title: "Google BigQuery data -Taxi Fare Predictions"
-date: 2018-01-28
+date: 2018-08-28
 tags: [data science, regression, xgboost]
 header:
   image: "/images/perceptron/percept.jpg"
