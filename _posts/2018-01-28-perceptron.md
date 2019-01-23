@@ -32,13 +32,8 @@ The data was collcted via Google BigQuery from "NYC TLC Trips" public dataset an
 We will retrieve 2015 year data and load 2 millions rows into dataframe. 
 
 ### Libraries import
-```python
-    """
-     - gbq - load BigQuery data  
-     - pandas, matplotlib, numpy - for data manipulation 
-     - seaborn - data visualization
 
-    """
+```python
       import pandas as pd
       import seaborn as sns
       import matplotlib.pyplot as plt
