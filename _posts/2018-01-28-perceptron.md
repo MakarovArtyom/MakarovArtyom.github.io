@@ -128,8 +128,11 @@ df=df[cols]
 </p>
 </details>
 
+
 Resulted dataframe is presented below:
-<img src="taxi_output/data_frame.PNG" alt="hi" class="inline"/>
+
+![LSTM]({{ 'taxi_output/data_frame.PNG' | absolute_url }})
+
 
 
 
