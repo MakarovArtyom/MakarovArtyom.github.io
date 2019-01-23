@@ -34,6 +34,12 @@ We will retrieve 2015 year data and load 2 millions rows into dataframe.
 <p>
   
  ```python
+ """
+- gbq - load BigQuery data  
+- pandas, matplotlib, numpy - for data manipulation 
+- seaborn - data visualization
+
+"""
     import pandas as pd
     import seaborn as sns
     import matplotlib.pyplot as plt
@@ -41,7 +47,43 @@ We will retrieve 2015 year data and load 2 millions rows into dataframe.
     from pandas.io import gbq
     import boto3 # transfer file with data to S3 cloud
     %matplotlib inline
+    
+"""
+- dateteme module for time type convertation  
+- we will use math modules to derive the custom distance feature based on radians
 
+"""
+import datetime as dt
+from math import sin, cos, sqrt, atan2, radians
+from scipy import stats
+from sklearn.utils import shuffle
+
+"""
+- import Plotly modules for interactive data visualization 
+- connect to plot inside notebook
+
+"""
+
+from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
+import plotly.plotly as py
+import plotly.graph_objs as go
+
+init_notebook_mode(connected=True)
+
+"""
+- sklearn for model building and performance validation
+
+"""
+
+from sklearn.model_selection import train_test_split
+from sklearn import linear_model
+from sklearn.metrics import mean_absolute_error
+
+from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import Lasso
+from sklearn import ensemble
+from sklearn.ensemble import RandomForestRegressor
+import xgboost as xgb
 ```
 </p>
 </details>
