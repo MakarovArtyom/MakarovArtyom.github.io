@@ -31,8 +31,7 @@ We will retrieve 2015 year data and load 2 millions rows into dataframe.
 
 <details><summary>CLICK ME</summary>
 <p>
- 
-```python
+ ```python
     import pandas as pd
     import seaborn as sns
     import matplotlib.pyplot as plt
