@@ -10,8 +10,26 @@ mathjax: "true"
 
 # Introduction
 
-For this project we are going to use Google BigQuery data to predict the estimated fare amount of New York taxi rides. We aim to manipulate the dataset, prepare exploratory analysis, retreiving all the hidden patterns and variables relationships for creating machine learning models to offer expected fare.
+For this project we are going to use Google BigQuery data to predict the estimated fare amount of New York taxi rides. 
+We aim to manipulate the dataset, prepare exploratory analysis, retreiving all the hidden patterns and variables relationships for creating machine learning models to offer expected fare.
 The major part is consentrated on data cleaning, visual component and fetaure engineering.
+
+#### The Data:
+
+The data was collcted via Google BigQuery from "NYC TLC Trips" public dataset and contains information about NYC taxi trips details:
+
+- Pickup longitude/latitude;
+- Dropoff longitude/latitude;
+- Pickup/dropoff time;
+- Passenger count;
+- Trip distance;
+- Fare amount. 
+
+We will retrieve 2015 year data and load 2 millions rows into dataframe. 
+
+### Libraries import
+
+
 
 ## H2 Heading
 
