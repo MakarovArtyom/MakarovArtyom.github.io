@@ -1,15 +1,11 @@
 ---
-title: Google BigQuery data -Taxi Fare Predictions
-date: {}
-tags:
-  - data science
-  - regression
-  - xgboost
+title: "Google BigQuery Taxi Fare Predictions"
+date: 2018-08-28
+tags: [data science, regression, xgboost]
 header:
-  image: /images/taxi_pic.jpg
-excerpt: 'Data Science, Regression, Xgboost'
-mathjax: 'true'
-published: true
+  image: "/images/taxi_pic.jpg"
+excerpt: "Data Science, Regression, XGBoost"
+mathjax: "true"
 ---
 
 # Introduction
@@ -34,11 +30,14 @@ We will retrieve 2015 year data and load 2 millions rows into dataframe.
 ### Libraries import
 
 ```python
+    import pandas as pd
+    import seaborn as sns
+    import matplotlib.pyplot as plt
     import numpy as np
+    from pandas.io import gbq
+    import boto3 # transfer file with data to S3 cloud 
 
-    def test_function(x, y):
-      z = np.sum(x,y)
-      return z
+    %matplotlib inline
 ```
 
 
