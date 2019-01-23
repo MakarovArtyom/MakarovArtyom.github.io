@@ -1,10 +1,10 @@
 ---
 layout: posts
 permalink: /data-wrangling/
-title: "Data Wrangling projects"
+title: "End-to-End projects"
 author_profile: true
 header:
-  image: "/images/fort point.png"
+  image: "/images/about_pic.jpg"
 ---
 
 
