@@ -2,7 +2,7 @@
 main:
   - title: "About"
     url: /about/
-  - title: "End-to_end Projects"
+  - title: "End-to-End Projects"
     url: /end-to-end-projects/
   # - title: "About"
   #   url: https://mmistakes.github.io/minimal-mistakes/about/
