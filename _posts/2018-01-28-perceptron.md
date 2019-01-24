@@ -336,11 +336,11 @@ After data processing steps above we see the dataframe has 1 704 730 rows and 18
 
 Before explanatory analysis start we list down a number of hypothesis as factors affecting the taxi rides cost:
 
-1. Fare amount-distance trip relationship: the longer the distance the higher taxi fare to pay;
-2. Trip duration effect: the trips with higher duration will cost more;
-3. Pickup time period - high taxi fares for peak hours;
-4. Pickup day - the fare amount can differ depends on day;
-5. Pickup neighborhood - the fare amount can flactuate depending on location.
+1. **Fare amount-distance trip relationship:** the longer the distance the higher taxi fare to pay;
+2. **Trip duration effect:** the trips with higher duration will cost more;
+3. **Pickup time period** - high taxi fares for peak hours;
+4. **Pickup day**  - the fare amount can differ depends on day;
+5. **Pickup neighborhood**  - the fare amount can flactuate depending on location.
 
 
 
