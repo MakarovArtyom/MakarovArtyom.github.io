@@ -375,6 +375,14 @@ plt.tight_layout()
 
 ![LSTM]({{ 'taxi_output/distplot.png' | absolute_url }})
 
+To illustrate relationship between variables graphically we draw a sample of 10000 points from entire frame. The correlation between fare amount and distance seems considerable (0.67), the large number of points on scatter located along the main diagonal.
+
+![LSTM]({{ 'taxi_output/pearson_67.PNG' | absolute_url }})
+
+![LSTM]({{ 'taxi_output/distplot.png' | absolute_url }})
+
+
+
 
 
 
