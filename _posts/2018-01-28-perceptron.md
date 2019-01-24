@@ -409,11 +409,159 @@ print 'Pearson correlation: '+ str(round(data['fare_amount'].corr(data['distance
 
 ![LSTM]({{ 'taxi_output/pearson_67.PNG' | absolute_url }})
 
-![LSTM]({{ 'taxi_output/distplot.png' | absolute_url }})
+![LSTM]({{ 'taxi_output/dist_scatter.png' | absolute_url }})
+
+
+#### Step №2 - Fare amount - duration
+
+Duration trip distribution looks quite smooth and not significantly affected by outliers. Nonetheless the correlation between duration and fare amount is not such strong (0.51).
 
 
 
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+f = plt.subplots(2,2,figsize=(8,6))
+plt.figure(1)
+plt.subplot(121)
+sns.distplot(data['diff'])
+plt.title('Duration trip distribution')
 
+# create seaborn boxplot 
+plt.subplot(122)
+sns.boxplot(y=data['diff'])
+plt.title('Duration trip boxplot')
+
+plt.show()
+```
+  </p>
+</details>
+
+![LSTM]({{ 'taxi_output/trip_box.png' | absolute_url }})
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- estimated Pearson R displayed lower correlation between fare and duration 
+
+"""
+
+fig, ax = plt.subplots(figsize=(9,7))
+
+ax.scatter(sample['diff'], sample['fare_amount'], s = 10, color = 'r', alpha = 0.75)
+
+ax.set_title('Fare amount-duration scatter')
+ax.set_xlabel('duration in sec')
+ax.set_ylabel('fare-amount')
+print 'Pearson correlation: '+ str(round(data['fare_amount'].corr(data['diff']),2))
+```
+  </p>
+</details>
+
+![LSTM]({{ 'taxi_output/pearson_51.PNG' | absolute_url }})
+
+![LSTM]({{ 'taxi_output/fare_duration.png' | absolute_url }})
+
+#### Step №3 - Time period effect
+
+The further step will be to analyze the fare amount changes over the time. 
+As we can observe from plot below, taxi costs remain stable on average over days.
+
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- groupby data by pickup day and estimate the mean 
+
+"""
+fig, ax = plt.subplots(figsize=(8,6))
+data.groupby('pickup_day')['fare_amount'].mean().plot.bar()
+ax.set_title('Mean fare amount per day')
+```
+  </p>
+</details>
+
+![LSTM]({{ 'taxi_output/fare_day.png' | absolute_url }})
+
+Over hours fare amount reaches its peak at 16:00 and slightly goes down till 21:00, while the lowest fare mean observed at 02:00.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- grouping per hour with mean estimated  
+
+"""
+fig, ax = plt.subplots(figsize=(8,6))
+
+data.groupby('pickup_hour')['fare_amount'].mean().plot.bar()
+ax.set_title('Mean fare amount per hour')
+plt.show()
+```
+  </p>
+</details>
+
+![LSTM]({{ 'taxi_output/fare_hour.png' | absolute_url }})
+
+However, the total rides count per hour presents minumum between 3:00 and 5:00 and hits maximum at 22:00.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- we use count() method to compute the total rides with respect of hour  
+
+"""
+fig, ax = plt.subplots(figsize=(8,6))
+data.groupby('pickup_hour')['fare_amount'].count().plot.bar()
+ax.set_title('Trips count per hour')
+```
+  </p>
+</details>
+
+![LSTM]({{ 'taxi_output/counts_per_hours.png' | absolute_url }})
+
+
+#### Step №4 - Plotting Heatmap
+
+We countinue with correlations heatmap for numerical variables and find the highest rate is shown between distance and fare amount (same result calculated previously). For other variables correlation seems not significant.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+# list numerical variables
+numeric=['dropoff_longitude','dropoff_latitude', 'pickup_longitude', 'pickup_latitude', 
+         'distance_trip', 'diff', 'fare_amount']
+"""
+- compute correlation matrix 
+- plot heatmap annotated with color bar
+
+"""
+matrix = data[numeric].corr()
+y, x = plt.subplots(figsize=(9, 7))
+
+sns.heatmap(matrix, annot=True, fmt=".2f", linewidths=.5, cmap='RdPu')
+plt.show()
+```
+  </p>
+</details>
+
+
+Additionaly we will build scatter plots to display the dense area for pickups and dropoffs. Besides we want to highlight the pickup points where fare amount flactuates over locations.
 
 
 
