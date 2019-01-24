@@ -560,6 +560,7 @@ plt.show()
   </p>
 </details>
 
+![LSTM]({{ 'taxi_output/heatmap.png' | absolute_url }})
 
 Additionaly we will build scatter plots to display the dense area for pickups and dropoffs. Besides we want to highlight the pickup points where fare amount flactuates over locations.
 
