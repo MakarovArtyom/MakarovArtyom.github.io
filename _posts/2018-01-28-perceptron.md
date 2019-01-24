@@ -232,6 +232,10 @@ def distance(lon1, lat1, lon2, lat2):
     c = 2 * np.arcsin(np.sqrt(a))
     km = 6367 * c
     return km
+    
+# adding a column to dataframe 
+df['distance_trip'] = distance(df['pickup_longitude'], df['pickup_latitude'], 
+                               df['dropoff_longitude'], df['dropoff_latitude'])
  ```
  </p>
 </details>
@@ -240,13 +244,72 @@ Note, that calculated distance is presented in kilometers and has a float type:
 
 ![LSTM]({{ 'taxi_output/distance.PNG' | absolute_url }})
 
-
-
-
-
 #### Step №4 - Outliers detection 
 
+On the next step we continue data cleaning with outliers check. Below we investigate the risk of incorrect spatial data - all coordinates pairs should be limited by boundaries: [-90, 90] for latitude and [-180, 180] for longitude.
 
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- initialize the interval for latitude/longitude
+- check if dataframe contains values out of boundaries, display the length
+
+"""
+
+lat_range=[-90,90]
+long_range=[-180,180]
+
+# pickups check
+print "dataframe length: "+ str(len(df[(df['pickup_latitude']> lat_range[0]) | (df['pickup_latitude']< lat_range[1])]))
+print "dataframe length: "+ str(len(df[(df['pickup_longitude']> long_range[0]) | (df['pickup_longitude']< long_range[1])]))
+# dropoffs check
+print "dataframe length: "+ str(len(df[(df['dropoff_latitude']> lat_range[0]) | (df['dropoff_latitude']< lat_range[1])]))
+print "dataframe length: "+ str(len(df[(df['dropoff_longitude']> long_range[0]) | (df['dropoff_longitude']< long_range[1])]))
+ ```
+  </p>
+</details>
+
+
+All pairs of coordinates lie inside of corresponding intervals. 
+![LSTM]({{ 'taxi_output/frame_length.PNG' | absolute_url }})
+
+Apart from data correctness check the useful option will be to remove extreme points for distance, duration and fare amount variables.
+This operation will reduce the variance and take out potential outliers from data.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- we will use numpy .percentile function to calculate first and third quartile 
+- next calculate interquartile interval 
+- set up the boundaries for extremely small and large values 
+- return the frame inside interval 
+
+"""
+def remove_outliers(df, column):
+    quartile_1, quartile_3 = np.percentile(df[column], [25, 75])
+    iqr = quartile_3 - quartile_1
+    min = quartile_1 - (iqr * 1.5)
+    max = quartile_3 + (iqr * 1.5)
+
+    df = df[(df[column] <= max) & (df[column] >= min)]
+    return df
+    
+ """
+- apply function for duration, distance and fare amount 
+
+"""
+data=remove_outliers(df, 'distance_trip')
+data=remove_outliers(data, 'fare_amount')
+data=remove_outliers(data, 'diff')    
+ ```
+  </p>
+</details>
 
 
 
