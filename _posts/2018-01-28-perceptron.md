@@ -134,9 +134,10 @@ Resulted dataframe is presented below:
 
 ![LSTM]({{ 'taxi_output/data_frame.PNG' | absolute_url }})
 
-#### Step №2 - Data cleaning
+#### Step №2 - Primary data cleaning
 
 Next we will drop NaN values from dataframe and make sure that our target variable, "fare amount", takes postive values. 
+Note, that some varibales, such as pickup or dropoff datetime should be converted into timestamp.
 
  ```python
 """
@@ -147,8 +148,46 @@ Next we will drop NaN values from dataframe and make sure that our target variab
 df=df[df['fare_amount']>0]
 df=df.dropna(how='any')
 df.isna().any()
- ```
 
+"""
+- apply the date type transformation for pickups/dropoffs
+
+"""
+df['pickup_datetime'] = df['pickup_datetime'].apply(lambda x: dt.datetime.strptime(x, '%Y-%m-%d %H:%M:%S'))
+df['dropoff_datetime'] = df['dropoff_datetime'].apply(lambda x: dt.datetime.strptime(x, '%Y-%m-%d %H:%M:%S'))
+
+ ```
+Now let's look at results of timestamp transformation: 
+
+![LSTM]({{ 'taxi_output/dtypes.PNG' | absolute_url }})
+
+#### Step №3 - Features engineering
+
+The further steps will be to calculate the difference in seconds and create new column for taxi trips duration. Besides we are going to derive time periods from stamps for both dropoffs and pickups. These variables will be used for further hypothesis testing and models fitting.
+
+ ```python
+ """
+- convert the diff columns into 'float' type
+
+"""
+df['diff'] = df['dropoff_datetime'] - df['pickup_datetime']
+df['diff'] = df['diff'].astype('timedelta64[s]')
+ 
+ """
+- create a separate column for each period of time, when dropoff/pickup was occured
+
+"""
+df['dropoff_year'] = [x.strftime('%Y')for x in df['dropoff_datetime']]
+df['dropoff_month'] = [x.strftime('%m')for x in df['dropoff_datetime']]
+df['dropoff_day'] = [x.strftime('%d')for x in df['dropoff_datetime']]
+df['dropoff_hour'] = [x.strftime('%H')for x in df['dropoff_datetime']]
+
+
+df['pickup_year'] = [x.strftime('%Y')for x in df['pickup_datetime']]
+df['pickup_month'] = [x.strftime('%m')for x in df['pickup_datetime']]
+df['pickup_day'] = [x.strftime('%d')for x in df['pickup_datetime']]
+df['pickup_hour'] = [x.strftime('%H')for x in df['pickup_datetime']]
+ ```
 
 
 
