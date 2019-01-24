@@ -1,10 +1,10 @@
----
+f---
 title: "Google BigQuery Taxi Fare Predictions"
 date: 2018-08-28
-tags: [data science, regression, xgboost]
+tags: [data wrangling, feature engineering, explanatory analysis]
 header:
   image: "/images/taxi_pic.jpg"
-excerpt: "Data Science, Regression, XGBoost"
+excerpt: "Data Wrangling, Feature Engineering, Explanatory Analysis"
 mathjax: "true"
 ---
 
