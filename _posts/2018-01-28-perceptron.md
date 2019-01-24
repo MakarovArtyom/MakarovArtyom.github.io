@@ -170,7 +170,7 @@ Now let's look at results of timestamp transformation:
 
 #### Step №3 - Features engineering
 
-The further steps will be to calculate the difference in seconds and create new column for taxi trips duration - *"diff"*. 
+The further steps will be to calculate the difference in seconds and create new column for taxi trips duration - *"diff"*. <br> 
 Besides we are going to derive time periods from stamps for both dropoffs and pickups. These variables will be used for further hypothesis testing and models fitting.
 
 <details><summary>Python code</summary> 
@@ -207,8 +207,44 @@ Display how the new features look like:
 
 ![LSTM]({{ 'taxi_output/new_features.PNG' | absolute_url }})
 
+The distance between pickup and dropoff points can also be highly useful for our analysis. To estimate the distance we will apply *Haversine formula* based on radians and add related column to a dataframe as *"distance_trip"* variable.
 
-#### Step №4 - Features engineering
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- difine an approxiamte earth radius in km
+- write a function to convert longitude/latitude to radians and return km distance from formula
+
+"""
+
+R=6373.0
+def distance(lon1, lat1, lon2, lat2):
+    lon1, lat1, lon2, lat2 = map(np.radians, [lon1, lat1, lon2, lat2])
+    # estimate the distance between dropoff (lon2, lat2) and pickup (lon1, lat1)
+    dlon = lon2 - lon1
+    dlat = lat2 - lat1
+
+    a = np.sin(dlat/2.0)**2 + np.cos(lat1) * np.cos(lat2) * np.sin(dlon/2.0)**2
+
+    c = 2 * np.arcsin(np.sqrt(a))
+    km = 6367 * c
+    return km
+ ```
+ </p>
+</details>
+
+Note, that calculated distance is presented in kilometers and has a float type: 
+
+![LSTM]({{ 'taxi_output/distance.PNG' | absolute_url }})
+
+
+
+
+
+#### Step №4 - Outliers detection 
 
 
 
