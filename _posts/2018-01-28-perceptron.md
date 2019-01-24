@@ -314,6 +314,21 @@ data=remove_outliers(data, 'diff')
 </details>
 
 
+The final note will be dropping the observetions where passengers count is more than 6. In this work we will consider the taxies that can carry up to 6 passangers only.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+data=data[data['passenger_count']<=6]
+print 'Final shape: '+str(data.shape) 
+```
+  </p>
+</details>
+
+After data processing steps above we see the dataframe has 1.704.730 rows and 18 features.
+![LSTM]({{ 'taxi_output/shape.PNG' | absolute_url }})
 
 
 
