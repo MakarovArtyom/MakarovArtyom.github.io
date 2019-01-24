@@ -246,7 +246,7 @@ Note, that calculated distance is presented in kilometers and has a float type:
 
 #### Step №4 - Outliers detection 
 
-On the next step we continue data cleaning with outliers check. Below we investigate the risk of incorrect spatial data - all coordinates pairs should be limited by boundaries: [-90, 90] for latitude and [-180, 180] for longitude.
+On the next step we continue data cleaning with outliers check. Below we investigate the risk of incorrect spatial data - all coordinates pairs should be limited by boundaries: *[-90, 90]* for latitude and *[-180, 180]* for longitude.
 
 <details><summary>Python code</summary> 
   
@@ -273,7 +273,9 @@ print "dataframe length: "+ str(len(df[(df['dropoff_longitude']> long_range[0]) 
 </details>
 
 
+
 All pairs of coordinates lie inside of corresponding intervals. 
+
 ![LSTM]({{ 'taxi_output/frame_length.PNG' | absolute_url }})
 
 Apart from data correctness check the useful option will be to remove extreme points for distance, duration and fare amount variables.
