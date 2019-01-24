@@ -377,6 +377,36 @@ plt.tight_layout()
 
 To illustrate relationship between variables graphically we draw a sample of 10000 points from entire frame. The correlation between fare amount and distance seems considerable (0.67), the large number of points on scatter located along the main diagonal.
 
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- shuffle datframe, take the portion of 10000 rows
+- use .corr() method to compute Pearson r for two variables in entire dataframe
+
+"""
+
+sample = shuffle(data)[0:10000]
+# Create the plot object
+fig, ax = plt.subplots(figsize=(9,7))
+
+# Plot the data, set the size (s), color and transparency (alpha)
+# of the points
+ax.scatter(sample['distance_trip'], sample['fare_amount'], s = 10, color = 'b', alpha = 0.75)
+
+
+# Label the axes and provide a title
+ax.set_title('Fare amount-distance scatter')
+ax.set_xlabel('trip-distance')
+ax.set_ylabel('fare-amount')
+print 'Pearson correlation: '+ str(round(data['fare_amount'].corr(data['distance_trip']),2))
+```
+  </p>
+</details>
+
+
 ![LSTM]({{ 'taxi_output/pearson_67.PNG' | absolute_url }})
 
 ![LSTM]({{ 'taxi_output/distplot.png' | absolute_url }})
