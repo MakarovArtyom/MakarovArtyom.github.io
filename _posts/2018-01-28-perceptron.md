@@ -342,6 +342,39 @@ Before explanatory analysis start we list down a number of hypothesis as factors
 4. **Pickup day**  - the fare amount can differ depends on day;
 5. **Pickup neighborhood**  - the fare amount can flactuate depending on location.
 
+#### Step №1 -  Fare amount - distance trip
+
+Starting with plotting distribution chart for distance and fare amount, we can investigate the form similar to stepwise and left tail for fare amount. However, the distribution peak reached between amount of 20 and 30.<br>
+In comparison, distance distribution presented much smoother.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+# set seaborn style with dark grid
+plt.style.use('seaborn-darkgrid')
+
+"""
+- combine the distplots in one figure, customize the size
+
+"""
+f = plt.subplots(2,2,figsize=(10,8))
+plt.subplot(1, 2, 1)
+sns.distplot(data['distance_trip'], kde=True, color="g", kde_kws={"shade": True}, label = 'trip-distance')
+plt.title('Distance distribution')
+
+plt.subplot(1, 2, 2)
+sns.distplot(data['fare_amount'], kde=True, color="b", kde_kws={"shade": True}, label = 'fare-amount')
+plt.title('Fare amount distribution')
+
+plt.tight_layout()
+```
+  </p>
+</details>
+
+![LSTM]({{ 'taxi_output/distplot.png' | absolute_url }})
+
 
 
 
