@@ -170,7 +170,8 @@ Now let's look at results of timestamp transformation:
 
 #### Step №3 - Features engineering
 
-The further steps will be to calculate the difference in seconds and create new column for taxi trips duration. Besides we are going to derive time periods from stamps for both dropoffs and pickups. These variables will be used for further hypothesis testing and models fitting.
+The further steps will be to calculate the difference in seconds and create new column for taxi trips duration - *"diff"*. 
+Besides we are going to derive time periods from stamps for both dropoffs and pickups. These variables will be used for further hypothesis testing and models fitting.
 
 <details><summary>Python code</summary> 
   
@@ -201,6 +202,18 @@ df['pickup_hour'] = [x.strftime('%H')for x in df['pickup_datetime']]
  ```
  </p>
 </details>
+
+Display how the new features look like: 
+
+![LSTM]({{ 'taxi_output/new_features.PNG' | absolute_url }})
+
+
+#### Step №4 - Features engineering
+
+
+
+
+
 
 
 ## H2 Heading
