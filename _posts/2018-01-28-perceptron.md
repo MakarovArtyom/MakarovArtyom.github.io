@@ -562,7 +562,90 @@ plt.show()
 
 ![LSTM]({{ 'taxi_output/heatmap.png' | absolute_url }})
 
+
+#### Step №5 - Pickups/dropoffs location
+
 Additionaly we will build scatter plots to display the dense area for pickups and dropoffs. Besides we want to highlight the pickup points where fare amount flactuates over locations.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- show the scatter based on pickups latitude/longitude
+
+"""
+fig, ax = plt.subplots(figsize=(9,7))
+
+ax.scatter(sample['pickup_longitude'], sample['pickup_latitude'], s = 8, color = 'r', alpha = 0.65)
+
+
+ax.set_title('Pickups location scatter')
+ax.set_xlabel('longitude')
+ax.set_ylabel('latitude')
+```
+  </p>
+</details>
+
+![LSTM]({{ 'taxi_output/scatter.png' | absolute_url }})
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- show the scatter based on dropoffs latitude/longitude
+
+"""
+fig, ax = plt.subplots(figsize=(9,7))
+
+ax.scatter(sample['dropoff_longitude'], sample['dropoff_latitude'], s = 8, color = 'b', alpha = 0.65)
+
+
+# Label the axes and provide a title
+ax.set_title('Dropoffs location scatter')
+ax.set_xlabel('longitude')
+ax.set_ylabel('latitude')
+```
+  </p>
+</details>
+
+![LSTM]({{ 'taxi_output/drop_scatter.png' | absolute_url }})
+
+Chart shows highest density area approximately between -74.05, -73.05 in tems of longitude and 40.70, 40.85 latitudes. The fare amount varies over the scatter, but anyhow it tends to increase on the range from 40.55 to 40.65 latitudes.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- use 'c' argument to add plot annotation,
+- color bar shows gradation with respect of fare change  
+
+"""
+
+fig, ax = plt.subplots(figsize=(9,7))
+
+scatter = ax.scatter(sample['dropoff_longitude'], sample['dropoff_latitude'], c=sample['fare_amount'],
+           s = 8, alpha = 0.65, cmap=plt.cm.autumn)
+plt.colorbar(scatter)
+
+ax.set_title('Pickups fare amount - coordinates')
+ax.set_xlabel('longitude')
+ax.set_ylabel('latitude')
+```
+  </p>
+</details>
+
+![LSTM]({{ 'taxi_output/annot_scatter.png' | absolute_url }})
+
+To provide the interactive visibility we are going to map points using Mapbox tool and Plotly modules.
+In this case we need to access custom mapbox style with access token and style reference.
+
+
 
 
 
