@@ -1,4 +1,4 @@
-f---
+---
 title: "Google BigQuery Taxi Fare Predictions"
 date: 2018-08-28
 tags: [data wrangling, feature engineering, explanatory analysis]
