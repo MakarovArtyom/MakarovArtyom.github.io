@@ -3,7 +3,7 @@ title: "Traditional and Bayesian approaches to A/B testing"
 date: 2018-10-11
 tags: [bayesian statistics, a/b test, hypothesis testing]
 header:
-  image: "/images/taxi_pic.jpg"
+  image: "/AB_test_output/ab.jpeg"
 excerpt: "Bayesian Statistics, A/B test, Hypothesis testing"
 mathjax: "true"
 ---
