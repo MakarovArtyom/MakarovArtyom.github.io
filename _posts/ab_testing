@@ -1,0 +1,16 @@
+---
+title: "Traditional and Bayesian approaches to A/B testing"
+date: 2018-10-11
+tags: [bayesian statistics, a/b test, hypothesis testing]
+header:
+  image: "/images/taxi_pic.jpg"
+excerpt: "Bayesian Statistics, A/B test, Hypothesis testing"
+mathjax: "true"
+---
+
+# Traditional and Bayesian approaches to A/B testing
+
+### Traditional A/B test - breif intoduction
+
+Performing taditional A/B testing, we need to deal with a number of approximations, that stand behind frequentist statistics approach.<br>
+Generally, this approach assumes the parameters of distribution are fixed and data generated randomly with respect of maximum likelihood function: 
