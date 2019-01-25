@@ -26,3 +26,30 @@ Common techniques, that frequentists use to make an assumption about estimate ar
 - Confidence interval.
 
 Theoretically we need to collect an infinite number of samples from population and constract CI (for istance, 95% probability) for each one, but in practice we draw a single sample and expect 95% of the interval estimates contain population parameter.
+
+#### t-test: theoretical aspects
+
+Student t-stest is parametric test, widely applied to evaluate weather the means of two samples have statistically significant difference.<br>
+In terms of hypothesis testing we can assume a case when we want to compare, for instance, two groups time consumption of particular webpage. Hence t-test can be performed for continuous outcome. 
+
+To recall the key concepts, the brief explanation of t-test types is formulated below.
+
+1. The **one-sample t-test**: compare the mean of a population with a theoretical value.<br>
+
+ - $t=\frac{m-\mu}{s/\sqrt{n}}$
+ - $df=n-1$,<br>
+ 
+where $m$ - population mean, $\mu$ -  theoretical value, $df$ - degrees of freedom.
+
+2. **Unpaired two sample t-test**: compare unrelated groups means (groups sourced from independent samples). 
+ - $t= \frac{m_A-m_B}{\sqrt{\frac{S^2}{n_A} + \frac{S^2}{n_B}}}$
+ - $S^2=\frac{\sum (x - m_A)^2+\sum (x - m_B)^2}{n_A + n_B - 2}$
+ - $df=n_A+n_B-2$,
+
+where $S^2$ - common variance of two samples, $m_A$, $m_B$ - means of groups $A$ and $B$, $n_A$, $n_B$ - sample sizes of $A$ and $B$ groups.
+
+3. **Paired t-test formula**: compare related groups means (groups sourced from same sample).
+ - $t = \frac{m}{s/\sqrt{n}}$
+ - $df=n-1$
+ 
+ 
