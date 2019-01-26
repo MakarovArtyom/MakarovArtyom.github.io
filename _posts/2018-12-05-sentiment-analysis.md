@@ -681,6 +681,7 @@ Simple model accuray: 0.822
  ```
  
  Use the same method to calculate score for regularized model.
+ 
  <details><summary>Python code</summary> 
   
 <p>
@@ -698,3 +699,138 @@ print 'Regularized model accuray: ' + str(round(reg_score, 3))
 Regularized model accuray: 0.833
 ```
 
+### Adaptive Boosting Classifier
+
+To improve the performance of classification model we able to apply ensemble algorithm as a combinataion of weaker classification algorithms for each iteration $t = 1...T$ .<br>
+The common choice would be Adaptive Boosting algorithm evaluation. We will fit a model testing different parametres via search grid to approach the optimum.
+
+ <details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- first, we test the range of trees for descision classifier and learning rate
+- establish a minimal number for internal node split = 5
+
+"""
+n_trees = range(10, 50, 5) 
+learning_rate = [0.0001, 0.001, 0.01, 0.1]
+dtree = DecisionTreeClassifier(random_state = 1, min_samples_split=5) # create decision tree classifier object
+adboost = AdaBoostClassifier(base_estimator=dtree)
+"""
+- additionally we will use two metrics for spliting a tree - gini and entropy criteria 
+- specify 3 folds cross-validation as a gridsearch parameter 
+
+"""
+
+param = {'base_estimator__criterion' : ['gini', 'entropy'],
+         'learning_rate': learning_rate,
+          "n_estimators": n_trees}
+
+grid_cv = GridSearchCV(adboost, param_grid=param, scoring = 'accuracy', cv=3)
+
+grid_cv.fit(feature_train, sentiment_train)
+ ```
+  </p>
+</details>
+
+ ```python
+ GridSearchCV(cv=3, error_score='raise-deprecating',
+       estimator=AdaBoostClassifier(algorithm='SAMME.R',
+          base_estimator=DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth=None,
+            max_features=None, max_leaf_nodes=None,
+            min_impurity_decrease=0.0, min_impurity_split=None,
+            min_samples_leaf=1, min_samples_split=5,
+            min_weight_fraction_leaf=0.0, presort=False, random_state=1,
+            splitter='best'),
+          learning_rate=1.0, n_estimators=50, random_state=None),
+       fit_params=None, iid='warn', n_jobs=None,
+       param_grid={'n_estimators': [10, 15, 20, 25, 30, 35, 40, 45], 'base_estimator__criterion': ['gini', 'entropy'], 'learning_rate': [0.0001, 0.001, 0.01, 0.1]},
+       pre_dispatch='2*n_jobs', refit=True, return_train_score='warn',
+       scoring='accuracy', verbose=0)
+  ```
+  
+Show the best model score on validation and related parametres.
+  
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+print round(grid_cv.best_score_,4)
+print grid_cv.best_params_
+ ```
+  </p>
+</details>
+
+ ```python
+0.7558
+{'n_estimators': 45, 'base_estimator__criterion': 'entropy', 'learning_rate': 0.001}
+ ```
+ 
+Calculate predictions for AdaBoost and show accuracy on test data.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+best_adboost = grid_cv.best_estimator_
+predictions = best_adboost.predict(test_data[keywords])
+round(metrics.accuracy_score(test_data['sentiment'], predictions),4)
+ ```
+  </p>
+</details>
+
+ ```python
+ 0.7667
+  ```
+  
+### Learning curve
+  
+In order to illustrate the accuracy score change with respect to train-validation sample size, we will plot the learning curves for trained models.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- return values from dataframe, suffle features and label 
+- define a function to evaluate learning curve on train size range 
+- print mean score on each train sample and plot curves for train and validation 
+
+"""
+
+X=reviews_data[keywords].values
+y=reviews_data['sentiment'].values
+X_shuf, y_shuf = shuffle(X, y)
+
+def plot_learning_curve(model):
+    train_sizes, train_scores, test_scores = learning_curve(model, X_shuf, y_shuf, train_sizes=np.arange(0.1,1., 0.2), 
+                                                                       cv=3, scoring='accuracy')
+    print 'Training sample size: ' + str(train_sizes)
+    print 'Mean score for train samples: ' + str(train_scores.mean(axis = 1))
+    print 'Mean score for test samples: ' + str(test_scores.mean(axis = 1))
+    
+    plt.figure(figsize=(9,7))
+    plt.plot(train_sizes, train_scores.mean(axis = 1), 'b-', marker='o', label='train')
+    plt.plot(train_sizes, test_scores.mean(axis = 1), '--', color='#af2c18', marker='o', label='validation')
+    plt.ylim((0.0, 1.05))
+    plt.legend(loc='upper right')
+    plt.xlabel("training size", size=12)
+    plt.ylabel("accuracy score", size=12)
+plot_learning_curve(simple_model)
+plt.title('Logistic regression - unregularized', size=15)
+ ```
+
+  </p>
+</details>
+
+ ```python
+Training sample size: [ 59 178 298 417 536]
+Mean score for train samples: [0.97175141 0.85580524 0.82997763 0.82014388 0.81156716]
+Mean score for test samples: [0.68120805 0.75167785 0.76510067 0.76733781 0.79194631]
+ ```
+![LSTM]({{ 'yelp_output/roc.PNG' | absolute_url }})
