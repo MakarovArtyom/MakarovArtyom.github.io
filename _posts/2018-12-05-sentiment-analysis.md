@@ -303,7 +303,7 @@ plt.show()
   </p>
 </details>
 
-![LSTM]({{ 'yelp_output/positive.png' | absolute_url }})
+![LSTM]({{ 'yelp_output/positive_cloud.png' | absolute_url }})
 
 Next we complete the same procedure for negative reviews.
 
@@ -330,7 +330,7 @@ plt.show()
   </p>
 </details>
 
-![LSTM]({{ 'yelp_output/negative.png' | absolute_url }})
+![LSTM]({{ 'yelp_output/negative_cloud.png' | absolute_url }})
 
 
 As we can conclude from charts the most common words display neutral customers sentiments and gereral term (such as 'food', 'place', 'london' or 'order', 'pizza') rather than feelings or particular experience. 
@@ -615,44 +615,44 @@ coefficients.sort_values('coefficients', ascending=False)
 </details>
 
  ```python
-	Feature	coefficients
-10	delicious	0.753607
-13	amazing	0.618723
-1	loved	0.515113
-5	perfect	0.480637
-14	excellent	0.415803
-17	tasty	0.362062
-4	perfectly	0.352833
-2	love	0.305544
-9	recommend	0.303009
-19	happy	0.301588
-0	wonderful	0.258520
-3	lovely	0.257344
-27	enjoy	0.187139
-28	enjoyed	0.173547
-16	friendly	0.130182
-18	fantastic	0.116963
-11	served	0.073657
-15	good	0.070752
-35	hated	0.000000
-36	Intercept	-0.064563
-26	rudeness	-0.076226
-29	filling	-0.142474
-23	service	-0.197804
-34	hate	-0.202412
-33	hungry	-0.204982
-24	like	-0.205757
-30	poor	-0.240060
-20	never	-0.248887
-7	terrible	-0.267078
-22	decent	-0.280627
-21	gross	-0.292031
-32	awful	-0.293193
-31	refill	-0.308748
-12	dirty	-0.347450
-8	nasty	-0.366258
-6	disappointed	-0.450833
-25	bad	-0.485633
+Feature	       coefficients
+delicious	0.753607
+amazing	        0.618723
+loved	        0.515113
+perfect	        0.480637
+excellent	0.415803
+tasty	        0.362062
+perfectly	0.352833
+love	        0.305544
+recommend	0.303009
+happy	        0.301588
+wonderful	0.258520
+lovely	        0.257344
+enjoy	        0.187139
+enjoyed   	0.173547
+friendly	0.130182
+fantastic	0.116963
+served	        0.073657
+good	        0.070752
+hated	        0.000000
+Intercept      -0.064563
+rudeness       -0.076226
+filling	       -0.142474
+service        -0.197804
+hate	       -0.202412
+hungry	       -0.204982
+like	       -0.205757
+poor	       -0.240060
+never	       -0.248887
+terrible       -0.267078
+decent	       -0.280627
+gross	       -0.292031
+awful	       -0.293193
+refill	       -0.308748
+dirty	       -0.347450
+nasty	       -0.366258
+disappointed   -0.450833
+bad	       -0.485633
  
   ```
 
@@ -677,7 +677,7 @@ print 'Simple model accuray: ' + str(round(simple_score, 3))
 </details>
 
  ```python
-Simple model accuray: 0.822
+Simple model accuracy: 0.822
  ```
  
  Use the same method to calculate score for regularized model.
@@ -696,7 +696,7 @@ print 'Regularized model accuray: ' + str(round(reg_score, 3))
 </details>
 
 ```python
-Regularized model accuray: 0.833
+Regularized model accuracy: 0.833
 ```
 
 ### Adaptive Boosting Classifier
