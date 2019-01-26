@@ -239,3 +239,217 @@ Name: sentiment, dtype: float64
 Bar chart above highlight significant imbalance classes with positive major class. 
 One of the propriate ways to mitigate imbalance is to make the equal proportion for both classes. However, the obvious disadvantage of this approach leads to entire sample reduction.
  
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- split frame into parts based on positive/negarite sentiment
+- undersample the major class to keep equal size for both
+- create dataframe with balanced classes
+
+"""
+positive_frame = reviews[reviews['sentiment']==1]
+negative_frame = reviews[reviews['sentiment']==0]
+
+# estimate the size ratio
+percentage = len(negative_frame)/float(len(positive_frame))
+negative = negative_frame
+positive = positive_frame.sample(frac=percentage) # use the same percentage
+# append negative reviews sample to reduced positive frame 
+reviews_data = negative.append(positive)
+
+print "Positive class ratio:", len(positive) / float(len(reviews_data))
+print "Negative class ratio:", len(negative) / float(len(reviews_data))
+print "Entire frame length:", len(reviews_data)
+
+ ```
+  </p>
+</details>
+
+ ```python
+Positive class ratio: 0.5
+Negative class ratio: 0.5
+Entire frame length: 894
+ ```
+ 
+### Words count and visualization
+
+For each review perform transformation into string type and generate the cloud of words using Wordcloud() module.
+
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+text_pos=str() # initialize strig for positive  frame
+for rev in positive_frame['reviews_punctuation_free']:
+    rev=str(rev)
+    text_pos = text_pos+rev
+    
+# create wordcloud object with text_pos as an argument 
+wordcloud = WordCloud(background_color='white', width=1600, height=800).generate(text_pos)
+# plot as a figure
+plt.figure(figsize=(12,8))
+
+plt.imshow(wordcloud, interpolation = 'bilinear')
+plt.axis('off')
+plt.tight_layout(pad=0)
+plt.show()
+
+ ```
+  </p>
+</details>
+
+![LSTM]({{ 'yelp_output/positive.png' | absolute_url }})
+
+Next we complete the same procedure for negative reviews.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+text_neg=str() # initialize strig for negative  frame
+for word in negative_frame['reviews_punctuation_free']:
+    word=str(word)
+    text_neg = text_neg+word
+
+wordcloud = WordCloud(background_color='white', width=1600, height=800).generate(text_neg)
+
+plt.figure(figsize=(12,8))
+
+plt.imshow(wordcloud, interpolation = 'bilinear')
+plt.axis('off')
+plt.tight_layout(pad=0)
+plt.show()
+
+ ```
+  </p>
+</details>
+
+![LSTM]({{ 'yelp_output/negative.png' | absolute_url }})
+
+
+As we can conclude from charts the most common words display neutral customers sentiments and gereral term (such as 'food', 'place', 'london' or 'order', 'pizza') rather than feelings or particular experience. 
+Let's tokenize the words and sort them with respect of frequency.
+
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- create a token object as a list of words, count the occurence respectively using FreqDist() module
+- display the frequency for number of words (250 in example)
+
+"""
+
+nltk.download('punkt')
+
+from nltk import FreqDist # used later to plot and get count
+from nltk.tokenize import word_tokenize # tokenizes our sentence by word
+
+token = word_tokenize(text_pos)
+
+fdist = FreqDist(token)
+
+fdist.most_common(250)
+
+ ```
+  </p>
+</details>
+
+Here are some words from tokenized list - note that the most frequent words have neutral sentiment. 
+
+ ```python
+ 
+ [('the', 12530),
+ ('and', 7823),
+ ('a', 6438),
+ ('i', 5877),
+ ('to', 4624),
+ ('was', 4117),
+ ('of', 4014),
+ ('it', 3675),
+ ('in', 2903),
+ ('is', 2552),
+ ('for', 2512),
+ ('with', 2324),
+ ('you', 2100),
+ ('but', 2009),
+ ('we', 1983),
+ ...
+ ('recommend', 201),
+ ('bar', 201),
+ ('cake', 201),
+ ('want', 199),
+ ('being', 198),
+ ('way', 197),
+ ('ice', 197),
+ ('ll', 196),
+ ('loved', 196),
+ ('over', 196),
+ ('sweet', 196),
+ ('who', 194),
+ ('excellent', 193),
+ ('pork', 193),
+ ('off', 192),
+ ('eat', 191),
+ ('know', 191),
+ ('gravy', 190),
+ ('every', 189)
+  ```
+  
+  Then display frequency for negative cases:
+  <details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+token = word_tokenize(text_neg)
+fdist = FreqDist(token)
+fdist.most_common(250)
+
+ ```
+  </p>
+</details>
+
+ ```python
+ [('the', 3745),
+ ('and', 2194),
+ ('to', 2019),
+ ('a', 1827),
+ ('i', 1751),
+ ('was', 1358),
+ ('it', 1118),
+ ('of', 1050),
+ ('we', 892),
+ ('in', 840),
+ ('for', 793),
+ ('that', 691),
+ ...
+ ('thing', 48),
+ ('dirty', 48),
+ ('bland', 48),
+ ('couple', 48),
+ ('okay', 47),
+ ('decent', 47),
+ ('star', 47),
+ ('already', 46),
+ ('put', 46),
+ ('since', 46),
+ ('doesn', 46),
+ ('want', 45),
+ ('little', 45)]
+  ```
+  
+## Model selection
+
+Since the majority of words for both positive and negative samples represent neutral sentiment, the reasonable solution seemed to prepare the bunch of sensitive words as features to build the separating hyperplane and hit the better model performance.
+
+
+  
