@@ -405,6 +405,7 @@ Here are some words from tokenized list - note that the most frequent words have
   ```
   
   Then display frequency for negative cases:
+  
   <details><summary>Python code</summary> 
   
 <p>
@@ -452,4 +453,248 @@ fdist.most_common(250)
 Since the majority of words for both positive and negative samples represent neutral sentiment, the reasonable solution seemed to prepare the bunch of sensitive words as features to build the separating hyperplane and hit the better model performance.
 
 
+### Keywords selection
+
+Collection of features represents both positive and negative customer's restaurant experience.
+ ```python
+ keywords = ['wonderful', 'loved', 'love', 'lovely', 'perfectly', 'perfect', 'disappointed', 'terrible', 'nasty',
+            'recommend', 'delicious', 'served', 'dirty', 'amazing', 'excellent', 'good', 'friendly','tasty', 
+            'fantastic','happy', 'never', 'gross', 'decent', 'service', 'like', 'bad', 'rudeness', 'enjoy', 'enjoyed',
+            'filling','poor', 'refill','awful', 'hungry', 'hate', 'hated'] 
+ ```
+ 
+Next we will estimate the count for the number of times the keyword occurs in the review. As a result of feature processing a single column for each word will be created.
+<details><summary>Python code</summary> 
   
+<p>
+  
+ ```python
+# create a binary column for each word in 'reviews_punctuation_free' column
+for i in keywords:
+    reviews_data[i] = reviews_data['reviews_punctuation_free'].apply(lambda x : x.split().count(i))
+reviews_data.head()
+ ```
+  </p>
+</details>
+
+![LSTM]({{ 'yelp_output/frame2.png' | absolute_url }})
+
+### Train-test split
+
+First, we make a split with 10% of test data. We will use this to make predictions later. 
+Then, split rest of the data into a train-validation with 80% of training set and 20% of the data for the validation set.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- split train_val and test data 
+- split train and validation 
+- create variables for features and label data
+
+"""
+
+train_val_data, test_data = train_test_split(reviews_data, test_size=0.1)
+train_data, validation_data = train_test_split(train_val_data, test_size=0.2)
+
+# display train, validation proportion
+print 'Training sample   : %d' % len(train_data)
+print 'Validation sample : %d' % len(validation_data)
+
+feature_train = train_data[keywords]
+sentiment_train = train_data['sentiment']
+                                            
+feature_val = validation_data[keywords]
+sentiment_val = validation_data['sentiment']
+ ```
+  </p>
+</details>
+
+ ```python
+Training sample   : 643
+Validation sample : 161
+ ```
+ 
+### Training simple model (regularization not included)
+
+We start model building with simple logistic regression - we will fit model on train dataset and measure accuracy on validation.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- since l2 is default penalty, we can take c as high value C=1e4
+- C approaches 0 and cost function becomes standard error function
+
+"""
+
+simple_model = LogisticRegression(penalty = 'l2', C=1e4, random_state = 1)
+simple_model.fit(feature_train, sentiment_train)
+sentiment_pred = simple_model.predict(feature_val)
+simple_score = accuracy_score(sentiment_val, sentiment_pred)
+
+print 'Simple model accuracy validation: ' + str(round(simple_score, 3))
+ ```
+  </p>
+</details>
+
+ ```python
+ 
+ Simple model accuracy validation: 0.783
+ ```
+ 
+ ### L2 regularization effects
+ 
+Then let's fit the model with different L2 regalarization parameters.<br>
+First, we are going to list the values of $λ = 1/c$ and fit the model with parametres $c$ - the inverse of regularization strength. Small value of c leads to strong regularization. 
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+c_param = [0.0001, 0.001, 0.005, 0.01, 0.05, 0.1, 1] # range of c = 1/lambda coefficients
+score_list = []
+
+for c in c_param:
+    model = LogisticRegression(penalty = 'l2', C = c,random_state = 1)
+    model.fit(feature_train, sentiment_train)
+    sentiment_pred = model.predict(feature_val)
+    score = accuracy_score(sentiment_val, sentiment_pred)
+    score_list.append(score) 
+ 
+ """
+- represent the results of different regularization strength as dataframe 
+
+"""
+scores = pd.DataFrame({'C-parameter': c_param, 'Accuracy score': score_list})
+
+scores
+ ```
+  </p>
+</details>
+
+![LSTM]({{ 'yelp_output/accuracy_score.PNG' | absolute_url }})
+
+### Best-model coefficients
+
+Next we going to show fit logistic regression model with best regularization parameter to shortlist the coefficient values. 
+Recall the large coefficients values attest potential overfitting of model.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- fit model with c = 0.05 as best performed on validation set
+- create dataframe with coefficients of fitted model 
+
+"""
+
+reg_model = LogisticRegression(penalty = 'l2', C = 0.05, random_state = 1)
+reg_model.fit(feature_train, sentiment_train)
+# concat the features list (keywords) and corresponding values 
+coefficients = pd.concat([pd.DataFrame(feature_train.columns),
+                        pd.DataFrame(np.transpose(reg_model.coef_))],
+                        axis = 1)
+coefficients.columns = ['Feature', 'coefficients']
+coefficients = coefficients.append({'Feature':'Intercept',
+                                   'coefficients':reg_model.intercept_[0]},
+                                  ignore_index=True)
+                                  
+coefficients.sort_values('coefficients', ascending=False)
+![LSTM]({{ 'yelp_output/accuracy_score.PNG' | absolute_url }})
+
+ ```
+  </p>
+</details>
+
+ ```python
+	Feature	coefficients
+10	delicious	0.753607
+13	amazing	0.618723
+1	loved	0.515113
+5	perfect	0.480637
+14	excellent	0.415803
+17	tasty	0.362062
+4	perfectly	0.352833
+2	love	0.305544
+9	recommend	0.303009
+19	happy	0.301588
+0	wonderful	0.258520
+3	lovely	0.257344
+27	enjoy	0.187139
+28	enjoyed	0.173547
+16	friendly	0.130182
+18	fantastic	0.116963
+11	served	0.073657
+15	good	0.070752
+35	hated	0.000000
+36	Intercept	-0.064563
+26	rudeness	-0.076226
+29	filling	-0.142474
+23	service	-0.197804
+34	hate	-0.202412
+33	hungry	-0.204982
+24	like	-0.205757
+30	poor	-0.240060
+20	never	-0.248887
+7	terrible	-0.267078
+22	decent	-0.280627
+21	gross	-0.292031
+32	awful	-0.293193
+31	refill	-0.308748
+12	dirty	-0.347450
+8	nasty	-0.366258
+6	disappointed	-0.450833
+25	bad	-0.485633
+ 
+  ```
+
+### Evaluating accuracy on test data
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- use .predict() method to make predictions 
+- calculate the accuracy score on test 
+
+"""
+simple_pred = simple_model.predict(test_data[keywords])
+simple_score = accuracy_score(test_data['sentiment'], simple_pred)
+
+print 'Simple model accuray: ' + str(round(simple_score, 3))
+ ```
+  </p>
+</details>
+
+ ```python
+Simple model accuray: 0.822
+ ```
+ 
+ Use the same method to calculate score for regularized model.
+ <details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+reg_pred = reg_model.predict(test_data[keywords])
+reg_score = accuracy_score(test_data['sentiment'], reg_pred)
+
+print 'Regularized model accuray: ' + str(round(reg_score, 3))
+ ```
+  </p>
+</details>
+
+```python
+Regularized model accuray: 0.833
+```
+
