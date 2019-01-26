@@ -833,4 +833,131 @@ Training sample size: [ 59 178 298 417 536]
 Mean score for train samples: [0.97175141 0.85580524 0.82997763 0.82014388 0.81156716]
 Mean score for test samples: [0.68120805 0.75167785 0.76510067 0.76733781 0.79194631]
  ```
+![LSTM]({{ 'yelp_output/logistic_reg.PNG' | absolute_url }})
+
+The accuracy on train sample goes down along with train sample increasing. 
+On the other hand, validation score grows starting from 50 observations and gets flat reached sample size equals 250. However gap between train and validation doesn't seem significant.
+
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+plot_learning_curve(reg_model)
+plt.title('Logistic regression - L2 regularized', size=15)
+ ```
+
+  </p>
+</details>
+
+ ```python
+Training sample size: [ 59 178 298 417 536]
+Mean score for train samples: [0.80225989 0.79213483 0.80425056 0.79776179 0.79850746]
+Mean score for test samples: [0.67225951 0.72930649 0.75615213 0.76957494 0.78411633]
+ ```
+![LSTM]({{ 'yelp_output/l2_reg.PNG' | absolute_url }})
+
+From learning curve above we see the regularization parameter for logistic regression slightly underfits the data compared to a simple regularization free model. The gap between train and validation remains small.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+plot_learning_curve(best_adboost)
+plt.title('Adaptive Boosting model', size=15)
+ ```
+
+  </p>
+</details>
+
+ ```python
+Training sample size: [ 59 178 298 417 536]
+Mean score for train samples: [0.98305085 0.91947566 0.92393736 0.91686651 0.91044776]
+Mean score for test samples: [0.67337808 0.7147651  0.7393736  0.73378076 0.75391499]
+ ```
+![LSTM]({{ 'yelp_output/adaptive.PNG' | absolute_url }})
+ 
+Despite the fact Adaboost models are not prone to overfitting, they tend to be sensitive to noisy data. The gap between train and validation seems more considerable, but keeps decreasing slightly with larger train sample.
+
+### Evaluating results on ROC curve
+
+Finally, validate the results of models plotting ROC curve for each to illustrate graphically sensitivity and specificity for pairs with respect to decision threshold.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- return the probabilities for binary classification  
+- plot receiver operating curve
+
+"""
+
+def roc_curve(model):
+    
+    plt.figure(figsize=(9,7))
+    y_probs = model.predict_proba(test_data[keywords])
+    skplt.metrics.plot_roc(test_data['sentiment'], y_probs, 
+                           figsize=(9,7), title=None, cmap='Blues')
+# plot ROC for simple regularization free model
+roc_curve(simple_model)
+plt.title('ROC for unregularized model', size=15)
+ ```
+
+  </p>
+</details>
+
 ![LSTM]({{ 'yelp_output/roc.PNG' | absolute_url }})
+
+Plot ROC curve for L2 regularized model.
+
+![LSTM]({{ 'yelp_output/roc_l2.PNG' | absolute_url }})
+
+Finally plot ROC curve for AdaBoost.
+
+![LSTM]({{ 'yelp_output/roc_adoptive.PNG' | absolute_url }})
+
+The charts above presents the highest overall accuracy and sensitivity/specificity tradeoff on test for regularized logistic model with parameter C=0.05. However, in our case simple and regularized model perform in similar way. The less accurate performance was shown by AdaBoost model, that could be explained by the fact of sensitivity to noisy data .
+
+### Best model predictions
+
+Form the best model predictions as a dataframe and compare them with test labels.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- create a dataframe object
+- combine predictions with target on test, write to csv 
+
+"""
+pred = pd.DataFrame()
+target=list(test_data['sentiment'])
+pred['prediction']=reg_pred
+pred['target']=target
+
+pred.to_csv('pred-target.csv', sep='\t', encoding='utf-8')
+pred.head(10)
+ ```
+
+  </p>
+</details>
+
+![LSTM]({{ 'yelp_output/predictions.PNG' | absolute_url }})
+
+## Further improvements
+
+The next steps for reaching higher modeling performance can be taken in following directions:
+
+1. Lexical normalization:
+ - Characters repetition, elonged words handling;
+ - Reviews translation - train additional machine learning model to translate the sentences; <br>
+2. Features engineering:
+ - Focus on words relationship, paired words influence;
+ - POS tagging use to identify the emotional tokens of content words;
+3. Use of lexicon-based algorithms, more orientated on semantic analysis and syntactic relationships. 
