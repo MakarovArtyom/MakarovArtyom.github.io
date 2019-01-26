@@ -477,7 +477,7 @@ reviews_data.head()
   </p>
 </details>
 
-![LSTM]({{ 'yelp_output/frame2.png' | absolute_url }})
+![LSTM]({{ 'yelp_output/frame2.PNG' | absolute_url }})
 
 ### Train-test split
 
