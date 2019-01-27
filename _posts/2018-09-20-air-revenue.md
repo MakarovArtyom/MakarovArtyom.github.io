@@ -222,3 +222,81 @@ print "Dickey-Fuller criteria: p=%f" % sm.tsa.stattools.adfuller(df['diff'][12:]
 
 Based on Dickey-Fuller criteria we can't prove stationarity, but we are able to make differencing for new series.
 
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+df['diff2'] = df['diff'].diff(1)
+pyplot.plot(df['diff2'])
+pyplot.show()
+print("Dickey-Fuller criteria: p=%f" % sm.tsa.stattools.adfuller(df['diff2'][13:])[1])
+ ```
+ 
+ </p>
+</details>
+
+![LSTM]({{ 'air_rev_output/differencing_2.PNG' | absolute_url }})
+
+ ```python
+Dickey-Fuller criteria: p=0.000324
+ ```
+The resulted series can be categorized as stationary and described more like noise process, that can allow us to prepare model.<br>
+Before model fitting, represent the autocorrelation function (ACF) and partial autocorrelation function (PCF) plots. 
+
+#### AR model for lagged values estimation
+
+Let's fit Autoregressive model to establish the optimum number of lagged values.<br>
+We will use transformed values since only stationary series could be passed in model.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- shift 13 orders, since differencing was applied 
+- autoregression package is already implemented in statmodels as AR()
+- order selection wil be based on AIC (Akaike criterion)
+
+"""
+data=df['diff2'][13:]
+model=smt.AR(data)
+order=smt.AR(data).select_order(ic='aic', maxlag=25)
+
+print 'Best lag order = {}'.format(order)
+ ```
+ 
+ </p>
+</details>
+
+ ```python
+Best lag order = 8
+ ```
+Given best lag order we are ready to visualize the autocorrelation/partial autocorrelation with ACF and PACF plots.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+plt.figure()
+plt.subplot(211)
+
+plot_acf(df['diff2'][13:], ax=plt.gca(), lags=8)
+pyplot.subplot(212)
+plot_pacf(df['diff2'][13:], ax=plt.gca(), lags=8)
+pyplot.show()
+ ```
+ 
+ </p>
+</details>
+
+![LSTM]({{ 'air_rev_output/autocorrelat.PNG' | absolute_url }})
+![LSTM]({{ 'air_rev_output/part_autocor.PNG' | absolute_url }})
+
+ACF plots display correlation between series and its lags and supposed to help in determining the order of the MA (q) model.<br>
+Partial autocorrelation plots (PACF), as the name suggests, display correlation between a variable and its lags that is not explained by previous lags. PACF plots are useful to set up the order of the AR(p) model.
+
+
+
