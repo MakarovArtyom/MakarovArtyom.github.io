@@ -244,7 +244,7 @@ Dickey-Fuller criteria: p=0.000324
 The resulted series can be categorized as stationary and described more like noise process, that can allow us to prepare model.<br>
 Before model fitting, represent the autocorrelation function (ACF) and partial autocorrelation function (PCF) plots. 
 
-#### AR model for lagged values estimation
+### AR model for lagged values estimation
 
 Let's fit Autoregressive model to establish the optimum number of lagged values.<br>
 We will use transformed values since only stationary series could be passed in model.
@@ -298,5 +298,291 @@ pyplot.show()
 ACF plots display correlation between series and its lags and supposed to help in determining the order of the MA (q) model.<br>
 Partial autocorrelation plots (PACF), as the name suggests, display correlation between a variable and its lags that is not explained by previous lags. PACF plots are useful to set up the order of the AR(p) model.
 
+## Model selection
 
+Before the model fitting the train/test split is preffered. <br>
+For a test sample the last 15 observations (15 months, 14%) will be suitable.  
+
+ ```python
+train=df[:'2017-06-01']
+test=df['2017-07-01':]
+  ```
+  
+### Holt-Winter's model 
+
+We can start from building Holt-Winter's model with exponental smoothing, adding trend component. 
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+holt = Holt(np.asarray(train['Value'])).fit(smoothing_level = 0.3,smoothing_slope = 0.1)
+test['Holt_linear'] = holt.forecast(len(test))
+
+plt.figure(figsize=(14,6))
+plt.plot(train['Value'], label='Train')
+plt.plot(test['Value'], label='Test')
+plt.plot(test['Holt_linear'], label='Holt_linear')
+plt.title('Holt linear trend')
+plt.legend(loc='best')
+plt.show()
+ ```
+ 
+ </p>
+</details>
+
+![LSTM]({{ 'air_rev_output/holt.PNG' | absolute_url }})
+
+### ARIMA: parameters selection 
+
+SARIMAX implenetation allows us to test range of parameters such as trend, seasonal component and noise for best model performance in the same way as "grid-search" does.
+
+The PACF graph represents 3 last lag value significantly different from zero. The value of $p$ could be chosen as $3$.<br>
+For $q$ value ACF represnts the first lag only as a considerable non-zero value, but in order to select the best from the range of models, its possible to fit SARIMAX with larger value, for instance, q from range(0,3). 
+
+Seasonal component $D=1$ and difference parameter $d=1$. <br>
+Parameters Q and P will be selected based on best model from range.
+
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- since we need to fit model with all possible combinations
+we use product of parameters lists 
+
+"""
+
+P = range(0, 2)
+Q = range(0, 2)
+p = range(0, 3)
+q = range(0, 3)
+
+a = list(itertools.product(p, Q, p, q))
+
+"""
+- will add results of modeling to list based on AIC criterion 
+
+"""
+best_aic = float("inf")
+warnings.filterwarnings('ignore')
+
+for param in a:
+    try:
+        model=sm.tsa.statespace.SARIMAX(train.Value_t, order=(param[2], 1, param[3]), 
+                                        seasonal_order=(param[0], 1, param[1], 12)).fit(disp=-1)
+    except ValueError:
+        print('wrong parameters:', param)
+        continue
+    aic = model.aic
+    if aic < best_aic:
+        best_model = model
+        best_aic = aic
+        best_param = param
+    
+warnings.filterwarnings('default')
+
+best_model.summary() 
+ ```
+ 
+ </p>
+</details>
+
+![LSTM]({{ 'air_rev_output/results.PNG' | absolute_url }})
+
+Ljung-Box criteria testifies that residuals are not autocorrelated with high significance level.<br> 
+Autocorrelation plot presents the only outlier, that was not considered by model. In general, resuduals are converged around zero. Considerable difference is not orbserved on seasonal lags.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- .plot_acf() to visualize the residuals partial autocorrelation for best model 
+
+"""
+
+plt.figure(figsize(13,6))
+plt.subplot(211)
+best_model.resid[1:].plot()
+plt.ylabel(u'Residuals')
+
+ax = plt.subplot(212)
+sm.graphics.tsa.plot_acf(best_model.resid[13:].values.squeeze(), lags=8, ax=ax)
+ ```
+ 
+ </p>
+</details>
+
+![LSTM]({{ 'air_rev_output/resid_autocor.PNG' | absolute_url }})
+![LSTM]({{ 'air_rev_output/resid_autocor2.PNG' | absolute_url }})
+
+Student citeria does not reject the hypothesis of unbiased estimation, while Dickey-Fuller rejects the hypothesis of non-stationarity.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+# use ttest_1samp for student criterion 
+print "Student criteria: p=%f" % stats.ttest_1samp(best_model.resid[13:], 0)[1]
+print "Dickey-Fuller criteria: p=%f" % sm.tsa.stattools.adfuller(best_model.resid[13:])[1]
+ ```
+ 
+ </p>
+</details>
+
+
+ ```python
+Student criteria: p=0.953890
+Dickey-Fuller criteria: p=0.000000
+ ```
+
+Define the reverse procudere for Box-Cox transformation below, applying to train sample.
+Then, we will plot train predictions, overlaped by true values to compare the modelling result with expected series.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- function will return transformation based on given lambda:
+- exp transformation for lambda=0;
+- inverse log transformation if lambda<>0 
+
+"""
+def invboxcox(y,lam):
+    if lam == 0:
+        return(np.exp(y))
+    else:
+        return(np.exp(np.log(lam*y+1)/lam))
+
+train['Value_new'] = invboxcox(best_model.fittedvalues, lam)
+plt.figure(figsize(15,7))
+train.Value.plot()
+train.Value_new[13:].plot(color='r')
+plt.ylabel('Value')
+pylab.show()
+ ```
+ 
+ </p>
+</details>
+
+![LSTM]({{ 'air_rev_output/predictions.PNG' | absolute_url }})
+ 
+### Evaluating predictions
+
+On the next step we evaluate predictions on test and plot result combind with train data set. 
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- make predictions, inversely transform and add to data frame
+- combine historical values with forecasted to display on graph 
+
+"""
+
+l=invboxcox(best_model.predict(start=89, end=120), lam)
+l=l.to_frame()
+l=l.rename(columns={0: 'Forecast'})
+test=test.rename(columns={"Value": 'Test_value'})
+
+df2=train[['Value']]
+# concat train and forecast frames for plotting
+df2 = pd.concat([df2, l])
+
+"""
+- combine true  data and forcasted values in one figure 
+- plot figure inside notebook with connection mode on 
+
+"""
+
+data1 = go.Scatter(
+          x=df.index,
+          y=df2['Value'],
+    name='True Value')
+
+data2 = go.Scatter(
+          x=l.index,
+          y=l['Forecast'],
+name='Forecast Value')
+
+data= [data1, data2]
+layout = {'title': 'Air Revenue (train) with Forecasted'}
+fig=go.Figure(data=data, layout=layout)
+
+iplot(fig, show_link=False)
+ ```
+ 
+ </p>
+</details>
+
+![LSTM]({{ 'air_rev_output/air_rev_pic.png' | absolute_url }})
+
+
+### Forecat Accuracy Evaluation
+
+To evaluate model performace, we are going to estimate mean squared and mean absolute errors and plot forecasted values over the test sample.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- display forecatsted and test values by red and green respectively 
+
+"""
+
+plt.figure(figsize=(10, 7))
+plt.plot(df2['Value'], 'b-')
+plt.plot(l['Forecast'][:'2018-11-05'], 'r-')
+plt.plot(test['Test_value'], 'g-')
+plt.legend(); plt.xlabel('Date'); plt.ylabel('Air Revenue')
+plt.title('Air Revenue: entire samle with Forecasted')
+ ```
+ 
+ </p>
+</details>
+
+![LSTM]({{ 'air_rev_output/predictions2.PNG' | absolute_url }})
+
+Estimate MSE and MAE on test:
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+```python
+# mean squared value on test 
+mse = ((l['2017-07-01':'2018-09-01']['Forecast'] - test['2017-07-01':'2018-09-01']['Test_value']) ** 2).mean()
+print('The Mean Squared Error of forecasts is {}'.format(round(mse, 2)))
+
+# mean absolute value on test 
+mae = (l['2017-07-01':'2018-09-01']['Forecast'] - test['2017-07-01':'2018-09-01']['Test_value']).mean()
+print('The Mean Absolute Error of forecasts is {}'.format(round(mae, 2)))
+ ```
+  
+ </p>
+</details>
+
+```python
+The Mean Squared Error of forecasts is 1.96499098925e+12
+The Mean Absolute Error of forecasts is -578170.27
+```
+
+##*References*:
+
+https://www.coursera.org/lecture/data-analysis-applications/vriemiennyie-riady-EjNEV <br>
+https://otexts.com/fpp2/<br>
+http://www.iosrjournals.org/iosr-jm/papers/vol1-issue3/C0131020.pdf<br>
+https://www.statsmodels.org/dev/generated/statsmodels.tsa.ar_model.AR.select_order.html
 
