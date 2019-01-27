@@ -575,8 +575,8 @@ print('The Mean Absolute Error of forecasts is {}'.format(round(mae, 2)))
 </details>
 
 ```python
-The Mean Squared Error of forecasts is 1.96499098925e+12
-The Mean Absolute Error of forecasts is -578170.27
+The Mean Squared Error of forecast is 1.96499098925e+12
+The Mean Absolute Error of forecast is -578170.27
 ```
 
 ## *References*:
