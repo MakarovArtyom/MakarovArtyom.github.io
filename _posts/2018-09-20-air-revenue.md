@@ -1,10 +1,10 @@
 ---
 title: "Time Series for Air revenue passenger prediction"
 date: 2018-10-11
-tags: [time series, statistical models, revenue prediction]
+tags: [time series, statistical models, revenue predictions]
 header:
   image: "/air_rev_output/air_revenue.jpeg"
-excerpt: "Time series, Statistical models, Revenue prediction"
+excerpt: "Time series, Statistical models, Revenue predictions"
 mathjax: "true"
 ---
 
