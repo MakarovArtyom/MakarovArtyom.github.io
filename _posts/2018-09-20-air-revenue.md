@@ -1,5 +1,5 @@
 ---
-title: "Time Series for Air revenue passenger prediction"
+title: "Time Series: Air revenue passenger prediction"
 date: 2018-10-11
 tags: [time series, statistical models, revenue predictions]
 header:
@@ -579,10 +579,10 @@ The Mean Squared Error of forecasts is 1.96499098925e+12
 The Mean Absolute Error of forecasts is -578170.27
 ```
 
-##*References*:
+## *References*:
 
-https://www.coursera.org/lecture/data-analysis-applications/vriemiennyie-riady-EjNEV <br>
-https://otexts.com/fpp2/<br>
-http://www.iosrjournals.org/iosr-jm/papers/vol1-issue3/C0131020.pdf<br>
-https://www.statsmodels.org/dev/generated/statsmodels.tsa.ar_model.AR.select_order.html
+1. https://www.coursera.org/lecture/data-analysis-applications/vriemiennyie-riady-EjNEV <br>
+2. https://otexts.com/fpp2/<br>
+3. http://www.iosrjournals.org/iosr-jm/papers/vol1-issue3/C0131020.pdf<br>
+4. https://www.statsmodels.org/dev/generated/statsmodels.tsa.ar_model.AR.select_order.html
 
