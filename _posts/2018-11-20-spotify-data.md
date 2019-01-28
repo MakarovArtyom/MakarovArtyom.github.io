@@ -3,7 +3,7 @@ title: "Spotify: Music Data retrieve and EDA"
 date: 2018-11-20
 tags: [spotify, explanatory data analysis, music data]
 header:
-  image: "/air_rev_output/air_revenue.jpeg"
+  image: "/spotify_test/spotify.jpeg"
 excerpt: "Spotify, Explanatory data analysis, Music data"
 mathjax: "true"
 ---
@@ -379,6 +379,111 @@ plt.annotate('Energy-acousticness relation',
 ![LSTM]({{ 'spotify_test/energy_acoustic.PNG' | absolute_url }})
 
 Paired charts shows the positive correlation character for energy and loudness, while energy-accousticness pair behaves in opposite way: energy goes down as acousticness rate increase.
+
+
+### Artist - Genre exploration
+
+To continue with explanatory analysis we will summarize popularity score per artist and top 10 least and most popular artists from sample.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+artist_df = pd.pivot_table(df, values='popularity_score', index=['artist_names'], aggfunc=np.mean)
+
+artist_df.fillna(0, inplace=True)
+# shortlist top 10 artist by popularity
+artist_df=artist_df.sort_values(by=['popularity_score'], ascending=False)
+artist_df.head(10)
+ ```
+ 
+ </p>
+</details>
+
+![LSTM]({{ 'spotify_test/artists_head.PNG' | absolute_url }})
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+# shortlist 10 least popular 
+artist_df.tail(10)
+ ```
+ 
+ </p>
+</details>
+
+![LSTM]({{ 'spotify_test/artists_tails.PNG' | absolute_url }})
+
+To explore the genres more, we can transform the genres tags into cloud of words and investigate their frequencies.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- generate a column of words counts dictionaries 
+- create new frame with columns as separate tags 
+
+"""
+
+df['words_count'] = df.genres_all.apply(lambda x: Counter(x.split(' ')))
+gen_table=pd.DataFrame(df.words_count.values.tolist())
+gen_table[np.isnan(gen_table)] = 0
+
+
+"""
+- for each review perform transformation into string type
+- generate the cloud of words using Wordcloud() module 
+
+"""
+
+# create wordcloud object with gen_table as an argument 
+wordcloud = WordCloud(background_color='white', width=1600, height=800).generate(' '.join(gen_table))
+# plot as a figure
+plt.figure(figsize=(12,8))
+
+plt.imshow(wordcloud, interpolation = 'bilinear')
+plt.axis('off')
+plt.tight_layout(pad=0)
+plt.show()
+ ```
+ 
+ </p>
+</details>
+
+![LSTM]({{ 'spotify_test/music_cloud.png' | absolute_url }})
+
+Finally, let's count some of the most popular tags from WordCloud and represent using bar chart.
+
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- initialize the list of genres we are interested in 
+- apply sorting to display ascending order 
+
+"""
+
+list_g = ['pop', 'folk', 'neo', 'electro', 'punk', 'dance', 'rock', 'soul', 'indie', 'chillhop']
+
+rcParams['figure.figsize'] = 7, 6
+
+gen_table[list_g].sum().sort_values(ascending=True).plot(kind='bar')
+plt.title('Top genres tags')
+ ```
+ 
+ </p>
+</details>
+
+![LSTM]({{ 'spotify_test/top_genres.PNG' | absolute_url }})
+
 
 
 
