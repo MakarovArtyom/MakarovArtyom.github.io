@@ -307,3 +307,80 @@ scatter2 = sns.pairplot(df[['popularity_score',
 
 We see few features show high correlation on pairplots. Then, form a heatmap to summarize the correlation ratio.
 
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- estimate correlations in matrix form 
+- plot seaborn heatmap with annotation bar
+
+"""
+
+numeric=['popularity_score', 'acousticness', 'danceability', 
+         'duration_ms', 'energy', 'instrumentalness', 
+         'liveness', 'loudness', 'speechiness', 'tempo', 'valence']
+
+matrix = df[numeric].corr()
+y, x = plt.subplots(figsize=(9, 7))
+
+heatmap = sns.heatmap(matrix, annot=True, fmt=".2f", linewidths=.5, cmap="GnBu")
+plt.show()
+ ```
+ 
+ </p>
+</details>
+
+![LSTM]({{ 'spotify_test/heatmap_spotify.PNG' | absolute_url }})
+
+To investigate the correlation for energy-loudness and energy-acousticness pairs we can build jointplots for each combination.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- first, display jointplot
+- add annotation bar to plot, specifying properties as 'arrowprops'
+
+"""
+# plot for energy-loudness pair 
+sns.jointplot(x="loudness", y="energy", data=df, kind="hex", height=4.5)
+
+plt.annotate('Energy-loudness relation',
+             xy=[0.1, 0.6],
+             xytext=[1, 1.2],
+             fontsize=14,
+             arrowprops=dict(color='grey',
+                             arrowstyle='simple',
+                             shrinkA=4,
+                             shrinkB=4))
+
+# plot for energy-acousticness pair 
+sns.jointplot(x="acousticness", y="energy", data=df, kind="hex", height=4.5)
+
+
+plt.annotate('Energy-acousticness relation',
+             xy=[0.1, 0.6],
+             xytext=[1, 1.2],
+             fontsize=14,
+             arrowprops=dict(color='grey',
+                             arrowstyle='simple',
+                             shrinkA=4,
+                             shrinkB=4))
+ ```
+ 
+ </p>
+</details>
+
+![LSTM]({{ 'spotify_test/energy_loudn.PNG' | absolute_url }})
+![LSTM]({{ 'spotify_test/energy_acoustic.PNG' | absolute_url }})
+
+Paired charts shows the positive correlation character for energy and loudness, while energy-accousticness pair behaves in opposite way: energy goes down as acousticness rate increase.
+
+
+
+
+
