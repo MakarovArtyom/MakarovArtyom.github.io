@@ -5,7 +5,7 @@ header:
   image: "/images/about_pic.jpg"
 ---
 Hi! 
-Welcome and thank you for consideration. Here is my portfolio and data science blog with some projects and breif professional interests description.
+Welcome and thank you for consideration. Here is my portfolio and data science blog with some projects and brief professional interests description.
 
 Having solid background in **Ecomomics** and relevant **Machine Learning** skills I'm passionate about **Data Science** and implementing cutting edge technologies for business needs and social good.
 
