@@ -12,6 +12,7 @@ mathjax: "true"
 
 Under this project scope we will forecast monthly air passenger revenue using time series techniques. <br>
 Time series is useful method in machine learning when we need to forecast a value given a time component: an information about the time period previous values were recorded. 
+Jupyter Notebook for current project can e found [here](https://github.com/MakarovArtyom/data-science-projects/tree/master/Time%20series%20-%20air%20revenue).
 
 **Data**: series sourced form "Federal reserve economic data" via Quandl API:<br>
 https://www.quandl.com/data/FRED/AIRRPMTSI-Air-Revenue-Passenger-Miles. <br>
