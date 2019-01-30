@@ -13,6 +13,7 @@ mathjax: "true"
 Originally found in Sweden, Spotify became one of the largest worldwide music streaming services. Since  2006 company has been growing its popularity and reached 87 million paying subscribers in November 2018. The large number of Spotify users allowed to create significant content database and retreive valuable patterns from tracks attributes. <br>
 
 For current project we used developers documentation and Web API to access music data, provided by platform. 
+Full code in Jupyter notebook is available in [repository](https://github.com/MakarovArtyom/data-science-projects/tree/master/Spotify%20EDA)
 
 **Data**:
 
