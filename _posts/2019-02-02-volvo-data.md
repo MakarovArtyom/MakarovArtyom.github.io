@@ -10,9 +10,9 @@ mathjax: "true"
 
 ## Background
 
-Vovlo Car Group finalized the sales results of 2018 year in [official release](https://www.media.volvocars.com/global/en-gb/media/pressreleases/247393/volvo-cars-sets-new-global-sales-record-in-2018-breaks-600000-sales-milestone) and hit the global record of $600.000$ sales.<br>
+Vovlo Car Group finalized the sales results of 2018 year in [official release](https://www.media.volvocars.com/global/en-gb/media/pressreleases/247393/volvo-cars-sets-new-global-sales-record-in-2018-breaks-600000-sales-milestone) and hit the global record of ***600.000*** sales.<br>
 
-The major contribution to overall sales growth was driven by China ($14.1%$) and US ($20.6%$). In comparison with December'17 we see the slight demand slowdown in Europe region ($-1.3%$) and US ($-8.8%$). However, total December volumes represent sustainable growth year over year. <br>
+The major contribution to overall sales growth was driven by China (***14.1%***) and US (***20.6%***). In comparison with December'17 we see the slight demand slowdown in Europe region (***-1.3%***) and US (***-8.8%***). However, total December volumes represent sustainable growth year over year. <br>
 
 To effectively predict auto sales and improve Volvo Group competitiveness we will analyze the monthly data and, 
 revealing seasonal flactuations derive predictions powered by neural network.
