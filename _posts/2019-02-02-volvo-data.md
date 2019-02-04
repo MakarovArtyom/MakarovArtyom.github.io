@@ -195,7 +195,7 @@ Starting with listing down a number of variables affecting amount of sales:
 
 ### Time period effect
 
-On the graph we see the tendency of sales amount **reaches its peak** at the **last month of each quarter**. 
+On the graph we see the tendency of average sales amount **reaches its peak** at the **last month of each quarter**. 
 
 <iframe width="800" height="600" frameborder="0" scrolling="no" src="//plot.ly/~makarovartyom/3.embed"></iframe>
 
@@ -203,7 +203,10 @@ Besides, we see the positive trend per year with the **highest total sales resul
 
 <iframe width="800" height="600" frameborder="0" scrolling="no" src="//plot.ly/~makarovartyom/5.embed"></iframe>
 
+### Volvo sales per model
 
+Then we can estimate the mean sales per model and get the top performers over the years.
+<iframe width="800" height="600" frameborder="0" scrolling="no" src="//plot.ly/~makarovartyom/7.embed"></iframe>
 
 
 
