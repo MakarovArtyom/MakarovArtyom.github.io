@@ -507,6 +507,7 @@ test_X = np.reshape(test_X, (test_X.shape[0], 1, test_X.shape[1]))
  </p>
 </details>
 
+
 **Stage 2: Model building**
 
 We assume network has a one-input layer with **lag=7**, **memory blocks=4** and **mean squared error** as a loss function. Besides, the **single output** will be produced by dense layer.
