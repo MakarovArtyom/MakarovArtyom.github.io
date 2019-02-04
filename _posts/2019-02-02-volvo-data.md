@@ -206,9 +206,7 @@ Besides, we see the positive trend per year with the **highest total sales resul
 ### Volvo sales per model
 
 Then we can estimate the mean sales per model and get the top performers over the years.
-<iframe width="800" height="600" frameborder="0" scrolling="no" src="//plot.ly/~makarovartyom/7.embed"></iframe>
-
-
+<iframe width="800" height="600" frameborder="0" scrolling="no" src="//plot.ly/~makarovartyom/9.embed"></iframe>
 
 
 
