@@ -304,7 +304,7 @@ iplot(fig)
  </p>
 </details>
 
-<iframe width="900" height="800" frameborder="0" scrolling="no" src="//plot.ly/~makarovartyom/15.embed"></iframe>
+<iframe width="800" height="600" frameborder="0" scrolling="no" src="//plot.ly/~makarovartyom/15.embed"></iframe>
 
 ### Inspect volatility
 
@@ -372,6 +372,8 @@ On the schema below we see three gates where sigmoid layer regulates the cell st
 
 Detailed LSTM components are described in [original paper](https://www.bioinf.jku.at/publications/older/2604.pdf).
 
+**Stage 1: Pre-processing**
+
 For our project we will use Keras deep learning library to train LSTM network.  
 First, preprare the dataset: we need to normalize the data to [0;1] range to prepare the scale for activation function.
 
@@ -417,7 +419,7 @@ print(len(train), len(test))
 62 34
 ```
 
-On this stage we will create a dataset with two columns from existing data, that consists of sales in $t$ period and $t+1$ time period, that supposed to be predicted. Assume lag=7 as a number of previous time periods to use as an input.  
+Continue with recreating a new dataset with two columns from existing data, that consists of sales in $t$ period and $t+1$ time period, that supposed to be predicted. Assume lag=7 as a number of previous time periods to use as an input.  
 
 <details><summary>Python code</summary> 
   
@@ -449,8 +451,7 @@ test_X, test_y = reshape_dataset(test, lag)
  </p>
 </details>
 
-Last step for preparation is to create data structure required for LSTM network in form of (#samples, time steps, features) 
-[samples, time steps, features].
+Last step for preparation is to create data structure required for LSTM network in form of (#samples, #time steps, #features).
 
 <details><summary>Python code</summary> 
   
@@ -463,6 +464,8 @@ test_X = np.reshape(test_X, (test_X.shape[0], 1, test_X.shape[1]))
  
  </p>
 </details>
+
+**Stage 2: Model building**
 
 We assume network has a one-input layer with **lag=7**, **memory blocks=4** and **mean squared error** as a loss function. Besides, the **single output** will be produced by dense layer.
 
@@ -499,6 +502,8 @@ Epoch 90/90
  
   ```
   
+**Stage 3: Model evaluation**
+
 Perform inverse transformation and evaluate model results. 
 
 <details><summary>Python code</summary> 
@@ -606,6 +611,24 @@ iplot(fig)
 </details>
 
 <iframe width="800" height="600" frameborder="0" scrolling="no" src="//plot.ly/~makarovartyom/17.embed"></iframe>
+
+Inspecting predictions on train sample we see in the model performs quite well in general, replicating the shape of actual values (for instance, high precision in 2015 year).<br>
+However, we assume that model does not cover the sharp peaks, underestimating predictions in highly-selling periods (March'14 or December'15). 
+![LSTM]({{ 'volvo_data/train_val.gif' | absolute_url }})
+
+The similar tendency is observed on test sample below. 
+
+![LSTM]({{ 'volvo_data/test_val.gif' | absolute_url }})
+
+**Futher Improvement**
+
+There are possible improvements we would merits mention for problem of sales prediction. 
+
+1. Multivariate model preparation. 
+
+
+
+
 
 
 
