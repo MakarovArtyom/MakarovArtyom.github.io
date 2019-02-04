@@ -364,6 +364,10 @@ iplot(fig)
 We see the moving average method barely predicts the consequent values. The volatility of series is quite high and process is characterized by systematic cycles. 
 Additionally we are able to apply **differencing** and prepare **stationarity test** based on Dickey-Fuller criteria.
 
+ ```python
+Dickey-Fuller criteria: p=0.485103
+ ```
+
 <iframe width="800" height="600" frameborder="0" scrolling="no" src="//plot.ly/~makarovartyom/13.embed"></iframe>
 
 Dickey-Fuller criteria proves the resulted series can not be categorized as stationary.
