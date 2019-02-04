@@ -677,7 +677,7 @@ One of the reasonable improvement, especially in terms of long-term forecasting 
 1. **Country** - exploration of local market features;
 2. **GDP** - propose the hypothesis of a positive relationship between GDP and sales;
 3. **Inflation rate** - IR tends to show negative correlation with sales;
-4. **Uneployment rate** - along with IR, uneployment rate can negatively effect on sales amount;
+4. **Unemployment rate** - along with IR, unemployment rate can negatively effect on sales amount;
 5. **Interest rate** - negative impact on consumer power. 
 
 **Model-wise predictions** are highly important for precise analysis: it's worth more **tuning** parameters for **multiple smaller models** than construct one complex.
