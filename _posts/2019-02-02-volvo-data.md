@@ -625,17 +625,30 @@ The similar tendency is observed on test sample below.
 
 There are possible improvements we would merits mention for problem of sales prediction. 
 
-1. Multivariate model preparation. 
+**1. Multivariate model preparation.**
 
-One of the useful improvement, especially for long-term forecasting will be including multiple variables in model, such as:
+One of the reasonable improvement, especially in terms of long-term forecasting will be including multiple variables in model, such as:
 
-1.
-2.
-3. 
+1. **Country** - exploration of local market features;
+2. **GDP** - propose the hypothesis of a positive relationship between GDP and sales;
+3. **Inflation rate** - IR negatively correlate between  IR and sales;
+4. **Uneployment rate** - along with IR, UN can negatively effect on sales amount;
+5. **Interest rate** - negative impact on consumer power. 
+
+**Model-wise predictions** are highly important for precise analysis: it's worth more **tuning** parameters for **multiple smaller models** than construct one complex.
 
 ![LSTM]({{ 'volvo_data/variables.png' | absolute_url }})
 
+Additionaly, the quality of domestic manufactured cars matters: consumers of different countries tend to purchase imported cars if they believe in higher quality. 
 
+**2. Existing model tuning**
 
+The current predictive model can be improved with both dataset enlarging and hyperparameters tuning.
+In case of LSTM model this can be related to:
+
+1. Training **epochs value**;
+2. **Memory blocks**;
+3. **Window (lag) value** - tune the number of "look back" time periods.
+4. **Stochastic optimizer** choosing. 
 
 
