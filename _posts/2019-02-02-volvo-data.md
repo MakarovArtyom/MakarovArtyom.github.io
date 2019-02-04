@@ -206,7 +206,161 @@ Besides, we see the positive trend per year with the **highest total sales resul
 ### Volvo sales per model
 
 Then we can estimate the mean sales per model and get the top performers over the years.
+ ```python
+color_scale = ['rgb(102, 102, 255)', 'rgb(102, 153, 255)',
+                     'rgb(102, 102, 255)', 'rgb(102, 0, 255)', 
+                     'rgb(153, 153, 255)', 'rgb(51, 153, 255)', 
+                     'rgb(0, 153, 255)', 'rgb(0, 102, 204)', 
+                     'rgb(0, 153, 204)',
+                     'rgb(0, 102, 153)', 'rgb(51, 102, 153)', 
+                     'rgb(0, 51, 153)','rgb(51, 51, 153)', 
+                     'rgb(102, 102, 153)', 'rgb(102, 0, 255)',
+                     'rgb(153, 51, 255)', 'rgb(102, 0, 102)', 
+                     'rgb(204, 0, 153)', 'rgb(153, 0, 153)', 
+                     'rgb(153, 51, 102)', 'rgb(117, 87, 87)',
+                     'rgb(112, 92, 92)', 'rgb(87, 87, 117)', 
+                     'rgb(117, 94, 87)','rgb(179, 152, 152)', 'rgb(88, 65, 65)']
+cf.set_config_file(offline=True, world_readable=True, theme='white')
+
+sales_model.iplot(kind='bubble', x='model', y='sales', size='sales', 
+                  title = 'Sales Average per Model',
+             xTitle='model', yTitle='sales amount',
+             filename='cufflinks/simple-bubble-chart', colors=color_scale)
+  ```
+  
 <iframe width="800" height="600" frameborder="0" scrolling="no" src="//plot.ly/~makarovartyom/9.embed"></iframe>
+
+On average the highest selling auto models are **XC60, XC60 II and XC90 II** - we can investigate the time series of these models more presicely and plot on chart. 
+XC60 II represents the rocket growth starting from end of 2017 and keeps trend within 2018. However, the sales of old version XC60 
+decrease along with sustainable flactuations of XC90 II. 
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+pivot=pd.pivot_table(sales, values='sales', index=['date'], columns=['model'], aggfunc=np.sum)
+pivot.fillna(0, inplace=True)
+trace_1 = go.Scatter(
+    x=pivot.index,
+    y=pivot['XC60'],
+    name = "model: XC60",
+    line = dict(color = '#dd870f'),
+    opacity = 1)
+
+trace_2 = go.Scatter(
+    x=pivot.index,
+    y=pivot['XC60 II'],
+    name = "model: XC60 II",
+    line = dict(color = '#7F7F7F'),
+    opacity = 1)
+
+
+trace_3 = go.Scatter(
+    x=pivot.index,
+    y=pivot['XC90 II'],
+    name = "model: XC90 II",
+    line = dict(color = '#0b7782'),
+    opacity = 1)
+
+data = [trace_1,trace_2, trace_3]
+
+layout = dict(
+    title='Top 3 High-Performed Models',
+    xaxis=dict(
+        rangeselector=dict(
+            buttons=list([
+                dict(count=1,
+                     label='6m',
+                     step='month',
+                     stepmode='backward'),
+                dict(count=6,
+                     label='12m',
+                     step='month',
+                     stepmode='backward'),
+                dict(step='all')
+            ])
+        ),
+        rangeslider=dict(
+            visible = True
+        ),
+        type='date'
+    )
+)
+
+fig = dict(data=data, layout=layout)
+iplot(fig)
+ ```
+ 
+ </p>
+</details>
+
+<iframe width="800" height="600" frameborder="0" scrolling="no" src="//plot.ly/~makarovartyom/1.embed"></iframe>
+
+### Inspect volatility
+
+Let's add moving average line for entire time series to see how this method approxiamtes true values. Choose window size equals 3.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+ """ 
+ - group entire sales by date column
+ - use .rolling() function to estimate mean 
+ - add resulted column to dataframe 
+ """
+data_moving=sales.groupby('date')['sales'].sum().to_frame()
+
+data_moving['3_moving_av']= data_moving['sales'].rolling(window=3, min_periods=0).mean()
+
+trace_1 = go.Scatter(
+    x=data_moving.index,
+    y=data_moving['sales'],
+    name = "sales amount",
+    line = dict(color = '#dd870f'),
+    opacity = 1)
+
+trace_2 = go.Scatter(
+    x=data_moving.index,
+    y=data_moving['10_moving_av'],
+    name = "moving-average",
+    line = dict(color = '#7F7F7F'),
+    opacity = 1)
+
+data = [trace_1,trace_2]
+
+layout = dict(
+    title='Moving average for sales amount')
+
+fig = dict(data=data, layout=layout)
+iplot(fig)
+ ```
+ 
+ </p>
+</details>
+
+<iframe width="900" height="800" frameborder="0" scrolling="no" src="//plot.ly/~makarovartyom/11.embed"></iframe>
+
+
+We see the moving average method barely predicts the consequent values. The volatility of series is quite high and process is characterized by systematic cycles. 
+Additionally we are able to apply differencing and prepare stationarity test based on Dickey-Fuller criteria.
+
+<iframe width="900" height="800" frameborder="0" scrolling="no" src="//plot.ly/~makarovartyom/13.embed"></iframe>
+
+Dickey-Fuller criteria proves the resulted series can not be categorized as stationary.
+
+## Time series modelling
+
+Time series prediction problem is a difficult type of modeling problem.
+To reach a maximum results we need use a method that handles sequently dependent values. One of the powerful kind of recurrent neural networks that solves time-series problem is Long Short-Term Memory network.<br>
+
+It has a chain structure, consisted of cells and gates, that are able to remove or add information.
+
+![LSTM]({{ 'https://en.wikipedia.org/wiki/Long_short-term_memory#/media/File:The_LSTM_cell.png' | absolute_url }})
+
+
 
 
 
