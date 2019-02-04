@@ -626,7 +626,13 @@ There are possible improvements we would merits mention for problem of sales pre
 
 1. Multivariate model preparation. 
 
+One of the useful improvement, especially for long-term forecasting will be including multiple variables in model, such as:
 
+1.
+2.
+3. 
+
+![LSTM]({{ 'volvo_data/variables.png' | absolute_url }})
 
 
 
