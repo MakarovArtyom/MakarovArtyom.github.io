@@ -125,6 +125,83 @@ LIMIT
   ```
 ![LSTM]({{ 'volvo_data/query.PNG' | absolute_url }})
 
+## Loading dataset to Notebook
+
+Now we are ready to import and analyze time series in Jupyter notebook. 
+We willplotly to visualize the data, pandas package for data manupulation and keras for model building.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- import Plotly modules for interactive data visualization 
+- connect to plot inside notebook
+"""
+
+from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
+import plotly.plotly as py
+import plotly.graph_objs as go
+init_notebook_mode(connected=True)
+
+# data manipulation libraries
+import pandas as pd  
+from pandas.io import gbq # retrieve google big query data
+import numpy as np           
+import matplotlib.pyplot as plt 
+%pylab inline
+plt.style.use('seaborn-whitegrid')
+
+# will ignore the warnings
+import warnings                 
+warnings.filterwarnings("ignore")
+
+# keras to build LSTM network 
+import math
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.layers import LSTM
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.metrics import mean_squared_error
+ ```
+ 
+ </p>
+</details>
+
+Once we're done we can start to load and explore dataset.
+ ```python
+ sql = """
+    SELECT *
+    FROM `sales_volvo.sales_monthly`
+    LIMIT 1600
+ # Run a Standard SQL query with the project set explicitly
+project_id = 'prredictions'
+sales = pd.read_gbq(sql, project_id=project_id, dialect='standard')
+sales.head()
+"""
+  ```
+![LSTM]({{ 'volvo_data/dataset.PNG	' | absolute_url }})
+
+## Explonatory analysis
+
+Starting with listing down a number of variables affecting amount of sales:
+
+1. Sales **per month** - the sales amount can differ depends on month;
+2. Sales **per year** - the sales amount can flactuate depending on year;
+3. Sales **per model** - particular Volvo model represents differnet sales amount in time.  
+
+### Time period effect
+
+On the graph we see the tendency of sales amount reaches its peak at the last month of each quarter. 
+
+<iframe width="900" height="800" frameborder="0" scrolling="no" src="//plot.ly/~makarovartyom/3.embed"></iframe>
+
+
+
+
+
+
 
 
 
