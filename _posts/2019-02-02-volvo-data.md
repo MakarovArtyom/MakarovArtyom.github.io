@@ -3,7 +3,7 @@ title: "Volvo sales data - Explanatory data analysis and Time series modelling"
 date: 2019-02-02
 tags: [time series, LSTM, explanatory analysis]
 header:
-  image: "/volvo_data/207937_Volvo_Cars_T8_Twin_Engine_Range.jpg"
+  image: "/volvo_data/volvo_models.jpg"
 excerpt: "Time Series, LSTM Network, Explanatory Analysis"
 mathjax: "true"
 ---
