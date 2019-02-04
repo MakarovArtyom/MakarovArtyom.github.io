@@ -612,7 +612,8 @@ iplot(fig)
 
 <iframe width="800" height="600" frameborder="0" scrolling="no" src="//plot.ly/~makarovartyom/17.embed"></iframe>
 
-Inspecting predictions on train sample we see in the model performs quite well in general, replicating the shape of actual values (for instance, high precision in 2015 year).<br>
+Inspecting predictions on train sample we see the model performs quite well in general, replicating the shape of actual values (for instance, high precision in 2015 year).<br>
+
 However, we assume that model does not cover the sharp peaks, underestimating predictions in highly-selling periods (March'14 or December'15). 
 ![LSTM]({{ 'volvo_data/train_val.gif' | absolute_url }})
 
