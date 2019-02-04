@@ -363,6 +363,36 @@ iplot(fig)
 
 We see the moving average method barely predicts the consequent values. The volatility of series is quite high and process is characterized by systematic cycles. 
 Additionally we are able to apply **differencing** and prepare **stationarity test** based on Dickey-Fuller criteria.
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- perfrom differencing of 7 order
+- use .adfuller() function from stattools module to estimate criterion
+"""
+data_diff=sales.groupby('date')['sales'].sum().to_frame()
+data_diff['sales_diff'] = data_diff['sales'].diff(7)
+trace = go.Scatter(
+    x=data_diff.index,
+    y=data_diff['sales_diff'],
+    name = "diff_sales",
+    line = dict(color = '#dd870f'),
+    opacity = 1)
+
+data = [trace]
+
+layout = dict(
+    title='Sales series with 7 order differencing')
+
+fig = dict(data=data, layout=layout)
+iplot(fig)
+print("Dickey-Fuller criteria: p=%f" % sm.tsa.stattools.adfuller(data_diff['sales_diff'][7:])[1])
+ ```
+ 
+ </p>
+</details>
 
  ```python
 Dickey-Fuller criteria: p=0.485103
