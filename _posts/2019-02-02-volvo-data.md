@@ -363,14 +363,249 @@ Dickey-Fuller criteria proves the resulted series can not be categorized as stat
 ## Time series modelling
 
 Time series prediction problem is a difficult type of modeling problem.
-To reach a maximum results we need use a method that handles sequently dependent values. One of the powerful kind of recurrent neural networks that solves time-series problem is Long Short-Term Memory network.<br>
+To reach a maximum results we need use a method that handles sequently dependent values. One of the powerful kind of recurrent neural networks that solves time-series problem is Long Short-Term Memory network (LSTM).<br>
 
 It has a chain structure, consisted of cells and gates, that are able to remove or add information.
+On the schema below we see three gates where sigmoid layer regulates the cell state and presents an output of between 0 (do not let information through) and 1 (through the entire piece of information). 
 
 <p><a href="https://commons.wikimedia.org/wiki/File:The_LSTM_cell.png#/media/File:The_LSTM_cell.png"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/The_LSTM_cell.png/1200px-The_LSTM_cell.png" alt="The LSTM cell.png"></a><br>By <a href="//commons.wikimedia.org/w/index.php?title=User:GChe&amp;action=edit&amp;redlink=1" class="new" title="User:GChe (page does not exist)">Guillaume Chevalier</a> - <span class="int-own-work" lang="en">Own work</span>, <a href="https://creativecommons.org/licenses/by/4.0" title="Creative Commons Attribution 4.0">CC BY 4.0</a>, <a href="https://commons.wikimedia.org/w/index.php?curid=71836793">Link</a></p>
 
+Detailed LSTM components are described in [original paper](https://www.bioinf.jku.at/publications/older/2604.pdf).
+
+For our project we will use Keras deep learning library to train LSTM network.  
+First, preprare the dataset: we need to normalize the data to [0;1] range to prepare the scale for activation function.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+ '''
+- retrieve series values with .values
+- use MinMaxScaler() from scikit-learn preprocessing module
+
+'''
+
+data=sales.groupby('date')['sales'].sum().to_frame()
+numpy.random.seed(7)
+data = data.values
+data = data.astype('float32')
+scaler = MinMaxScaler(feature_range=(0, 1))
+data = scaler.fit_transform(data)
+ ```
+ 
+ </p>
+</details>
+
+Then we prepare train/test split for our data. We will use *65/35* proportion to train and evaluate model. 
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+# split into train and test sets
+train_size  = int(len(data) * 0.65)
+test_size = len(data) - train_size
+train, test = data[0:train_size,:], data[train_size:len(data),:]
+print(len(train), len(test))
+ ```
+ 
+ </p>
+</details>
+
+```python
+62 34
+```
+
+On this stage we will create a dataset with two columns from existing data, that consists of sales in $t$ period and $t+1$ time period, that supposed to be predicted. Assume lag=7 as a number of previous time periods to use as an input.  
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+```python
+  
+"""
+- start with creating an empty list for both data and target 
+- reshape values for t period and t+1 for X and y (start with lag-1 to put first value in dataset)
+
+"""
+
+def reshape_dataset(dataset, lag):
+    X=list()
+    y=list()
+
+    for i in range(len(dataset)-lag-1):
+        a = dataset[i:(i+lag), 0]
+        X.append(a)
+        y.append(dataset[i + lag, 0])
+    return np.array(X), np.array(y)
+
+lag=7
+train_X, train_y = reshape_dataset(train, lag)
+test_X, test_y = reshape_dataset(test, lag)
+ ```
+ 
+ </p>
+</details>
+
+Last step for preparation is to create data structure required for LSTM network in form of (#samples, time steps, features) 
+[samples, time steps, features].
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+train_X = np.reshape(train_X, (train_X.shape[0], 1, train_X.shape[1]))
+test_X = np.reshape(test_X, (test_X.shape[0], 1, test_X.shape[1]))
+ ```
+ 
+ </p>
+</details>
+
+We assume network has a one-input layer with **lag=7**, **memory blocks=4** and **mean squared error** as a loss function. Besides, the **single output** will be produced by dense layer.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+# create and fit the LSTM network
+model = Sequential()
+model.add(LSTM(4, input_shape=(1, lag)))
+model.add(Dense(1, activation = 'linear'))
+model.compile(loss='mean_squared_error', optimizer='adam')
+model.fit(train_X, train_y, epochs=90, batch_size=1, verbose=2)
+ ```
+ 
+ </p>
+</details>
+
+ ```python
+ ....
+ Epoch 85/90
+ - 0s - loss: 0.0102
+Epoch 86/90
+ - 0s - loss: 0.0099
+Epoch 87/90
+ - 0s - loss: 0.0097
+Epoch 88/90
+ - 0s - loss: 0.0098
+Epoch 89/90
+ - 0s - loss: 0.0097
+Epoch 90/90
+ - 0s - loss: 0.0097
+ 
+  ```
+  
+Perform inverse transformation and evaluate model results. 
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+"""
+- make predictions on train and test samples
+- use inverse_transform() function to perform inverse transformation
+- calculate metrics on train/test
+"""
+
+predict_train = model.predict(train_X)
+predict_test = model.predict(test_X)
+
+predict_train = scaler.inverse_transform(predict_train)
+train_y = scaler.inverse_transform([train_y])
+predict_test = scaler.inverse_transform(predict_test)
+test_y = scaler.inverse_transform([test_y])
+
+mse_train = math.sqrt(mean_squared_error(train_y[0], predict_train[:,0]))
+print('RMSE on train: %.2f' % (mse_train))
+mse_test = math.sqrt(mean_squared_error(test_y[0], predict_test[:,0]))
+print('RMSE on test: %.2f' % (mse_test))
+ ```
+ 
+ </p>
+</details>
+
+ ```python
+RMSE on train: 3709.17
+RMSE on test: 5044.35
+ ```
+After the metrics are calculated we need to visualize the predictions with respect of true values to see check the underestimated/overestimated areas. 
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+
+"""
+- shift train/test predictions for plotting
+- write to a dataframe with actual values
+"""
+train_pred = numpy.empty_like(data)
+train_pred[:, :] = numpy.nan
+train_pred[lag:len(predict_train)+lag, :] = predict_train
+
+test_pred = numpy.empty_like(data)
+test_pred[:, :] = numpy.nan
+test_pred[len(predict_train)+(lag*2)+1:len(data)-1, :] = predict_test
+# add date column to values 
+res=pd.DataFrame(data=list(sales.groupby('date')['sales'].sum().to_frame()['sales']))
+res['date']=sales.groupby('date')['sales'].sum().to_frame().index
+res=res.rename(columns={0: 'true_values'})
+res['train_predictions']=train_pred # train_pred
+res['test_predictions']=test_pred # test_pred
+```
+ 
+ </p>
+</details>
+
+Predictions represent the shape of actual series, repeating the seasonal behaviour of monthly sales. 
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
+ ```python
+
+trace_1 = go.Scatter(
+    x=res.date,
+    y=res['true_values'],
+    name = "Actual sales",
+    line = dict(color = '#dd870f'),
+    opacity = 1)
+
+trace_2 = go.Scatter(
+    x=res.date[7:train_size-1],
+    y=res['train_predictions'][7:train_size-1],
+    name = "Train predictions",
+    line = dict(color = '#7F7F7F'),
+    opacity = 1)
 
 
+trace_3 = go.Scatter(
+    x=res.date[69:95],
+    y=res['test_predictions'][69:95],
+    name = "Test predictions",
+    line = dict(color = '#0b7782'),
+    opacity = 1)
+
+data = [trace_1,trace_2, trace_3]
+
+layout = dict(
+    title='Sales predictions - LSTM model')
+
+
+fig = dict(data=data, layout=layout)
+iplot(fig)
+```
+ 
+ </p>
+</details>
+
+<iframe width="800" height="600" frameborder="0" scrolling="no" src="//plot.ly/~makarovartyom/17.embed"></iframe>
 
 
 
