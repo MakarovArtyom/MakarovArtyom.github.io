@@ -660,9 +660,9 @@ Inspecting predictions on train sample we see the model performs quite well in g
 However, we assume that model does not cover the sharp peaks, underestimating predictions in highly-selling periods (March'14 or December'15). 
 ![LSTM]({{ 'volvo_data/train_val.gif' | absolute_url }})
 
-The similar tendency is observed on test sample below. 
-**Overestimating** can cause too positive prediction and wrong beliefs, that often leads to high targets setting and production costs increase. 
-**Underestimating** in opposite, can lead to wrongly negative market outlook. 
+The similar tendency is observed on test sample below. <br>
+ - **Overestimating** can cause too positive prediction and wrong beliefs, that often leads to high targets setting and production costs increase. <br>
+ - **Underestimating** in opposite, can lead to wrongly negative market outlook. 
 
 ![LSTM]({{ 'volvo_data/test_val.gif' | absolute_url }})
 
