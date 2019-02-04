@@ -128,7 +128,7 @@ LIMIT
 ## Loading dataset to Notebook
 
 Now we are ready to import and analyze time series in Jupyter notebook. 
-We willplotly to visualize the data, pandas package for data manupulation and keras for model building.
+We will use Plotly to visualize the data, Pandas package for data manupulation and Keras for model building.
 
 <details><summary>Python code</summary> 
   
@@ -212,6 +212,10 @@ Then we can estimate the mean sales per model and get the top performers over th
 <p>
   
  ```python
+"""
+- choose the color scale - will use different colors for models
+- use cufflinks package to plot from dataframe
+"""
 color_scale = ['rgb(102, 102, 255)', 'rgb(102, 153, 255)',
                      'rgb(102, 102, 255)', 'rgb(102, 0, 255)', 
                      'rgb(153, 153, 255)', 'rgb(51, 153, 255)', 
@@ -248,6 +252,10 @@ decrease along with sustainable flactuations of XC90 II.
 <p>
   
  ```python
+ """
+ - plot scatter for 3 top performed models
+ - add rangeslider to navigate between periods
+ """
 pivot=pd.pivot_table(sales, values='sales', index=['date'], columns=['model'], aggfunc=np.sum)
 pivot.fillna(0, inplace=True)
 trace_1 = go.Scatter(
@@ -308,7 +316,7 @@ iplot(fig)
 
 ### Inspect volatility
 
-Let's add moving average line for entire time series to see how this method approxiamtes true values. Choose window size equals 3.
+Let's add moving average line for entire time series to see how this method approxiamtes true values. Choose **window size equals 3**.
 
 <details><summary>Python code</summary> 
   
@@ -354,7 +362,7 @@ iplot(fig)
 
 
 We see the moving average method barely predicts the consequent values. The volatility of series is quite high and process is characterized by systematic cycles. 
-Additionally we are able to apply differencing and prepare stationarity test based on Dickey-Fuller criteria.
+Additionally we are able to apply **differencing** and prepare **stationarity test** based on Dickey-Fuller criteria.
 
 <iframe width="800" height="600" frameborder="0" scrolling="no" src="//plot.ly/~makarovartyom/13.embed"></iframe>
 
@@ -363,10 +371,10 @@ Dickey-Fuller criteria proves the resulted series can not be categorized as stat
 ## Time series modelling
 
 Time series prediction problem is a difficult type of modeling problem.
-To reach a maximum results we need use a method that handles sequently dependent values. One of the powerful kind of recurrent neural networks that solves time-series problem is Long Short-Term Memory network (LSTM).<br>
+To reach a maximum results we need use a method that handles **sequently dependent values**. One of the powerful kind of recurrent neural networks that solves time-series problem is *Long Short-Term Memory network (LSTM)*.<br>
 
 It has a chain structure, consisted of cells and gates, that are able to remove or add information.
-On the schema below we see three gates where sigmoid layer regulates the cell state and presents an output of between 0 (do not let information through) and 1 (through the entire piece of information). 
+On the schema below we see three gates where sigmoid layer regulates the cell state and presents an output of between **0** (**do not** let information through) and **1** (**through the entire** piece of information). 
 
 <p><a href="https://commons.wikimedia.org/wiki/File:The_LSTM_cell.png#/media/File:The_LSTM_cell.png"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/The_LSTM_cell.png/1200px-The_LSTM_cell.png" alt="The LSTM cell.png"></a><br>By <a href="//commons.wikimedia.org/w/index.php?title=User:GChe&amp;action=edit&amp;redlink=1" class="new" title="User:GChe (page does not exist)">Guillaume Chevalier</a> - <span class="int-own-work" lang="en">Own work</span>, <a href="https://creativecommons.org/licenses/by/4.0" title="Creative Commons Attribution 4.0">CC BY 4.0</a>, <a href="https://commons.wikimedia.org/w/index.php?curid=71836793">Link</a></p>
 
@@ -375,7 +383,7 @@ Detailed LSTM components are described in [original paper](https://www.bioinf.jk
 **Stage 1: Pre-processing**
 
 For our project we will use Keras deep learning library to train LSTM network.  
-First, preprare the dataset: we need to normalize the data to [0;1] range to prepare the scale for activation function.
+First, preprare the dataset: we need to **normalize the data** to [0;1] range to prepare the scale for activation function.
 
 <details><summary>Python code</summary> 
   
@@ -419,7 +427,7 @@ print(len(train), len(test))
 62 34
 ```
 
-Continue with recreating a new dataset with two columns from existing data, that consists of sales in $t$ period and $t+1$ time period, that supposed to be predicted. Assume lag=7 as a number of previous time periods to use as an input.  
+Continue with recreating a new dataset with two columns from existing data, that consists of sales in $t$ period and $t+1$ time period, that supposed to be predicted. Assume **lag=7** as a number of previous time periods to use as an input.  
 
 <details><summary>Python code</summary> 
   
@@ -618,6 +626,8 @@ However, we assume that model does not cover the sharp peaks, underestimating pr
 ![LSTM]({{ 'volvo_data/train_val.gif' | absolute_url }})
 
 The similar tendency is observed on test sample below. 
+**Overestimating** can cause too positive prediction and wrong beliefs, that often leads to high targets setting and production costs increase. 
+**Underestimating** in opposite, can lead to wrongly negative market outlook. 
 
 ![LSTM]({{ 'volvo_data/test_val.gif' | absolute_url }})
 
