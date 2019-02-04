@@ -304,7 +304,7 @@ iplot(fig)
  </p>
 </details>
 
-<iframe width="800" height="600" frameborder="0" scrolling="no" src="//plot.ly/~makarovartyom/1.embed"></iframe>
+<iframe width="900" height="800" frameborder="0" scrolling="no" src="//plot.ly/~makarovartyom/15.embed"></iframe>
 
 ### Inspect volatility
 
