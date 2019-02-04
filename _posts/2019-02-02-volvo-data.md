@@ -658,7 +658,7 @@ In case of LSTM model this can be related to:
 
 1. Training **epochs value**;
 2. **Memory blocks**;
-3. **Window (lag) value** - tune the number of "look back" time periods.
+3. **Window (lag) value** - tune the number of "look back" time periods;
 4. **Stochastic optimizer** choosing. 
 
 
