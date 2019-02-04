@@ -206,6 +206,11 @@ Besides, we see the positive trend per year with the **highest total sales resul
 ### Volvo sales per model
 
 Then we can estimate the mean sales per model and get the top performers over the years.
+
+<details><summary>Python code</summary> 
+  
+<p>
+  
  ```python
 color_scale = ['rgb(102, 102, 255)', 'rgb(102, 153, 255)',
                      'rgb(102, 102, 255)', 'rgb(102, 0, 255)', 
@@ -227,6 +232,10 @@ sales_model.iplot(kind='bubble', x='model', y='sales', size='sales',
              xTitle='model', yTitle='sales amount',
              filename='cufflinks/simple-bubble-chart', colors=color_scale)
   ```
+  
+   </p>
+</details>
+  
   
 <iframe width="800" height="600" frameborder="0" scrolling="no" src="//plot.ly/~makarovartyom/9.embed"></iframe>
 
@@ -341,13 +350,13 @@ iplot(fig)
  </p>
 </details>
 
-<iframe width="900" height="800" frameborder="0" scrolling="no" src="//plot.ly/~makarovartyom/11.embed"></iframe>
+<iframe width="800" height="600" frameborder="0" scrolling="no" src="//plot.ly/~makarovartyom/11.embed"></iframe>
 
 
 We see the moving average method barely predicts the consequent values. The volatility of series is quite high and process is characterized by systematic cycles. 
 Additionally we are able to apply differencing and prepare stationarity test based on Dickey-Fuller criteria.
 
-<iframe width="900" height="800" frameborder="0" scrolling="no" src="//plot.ly/~makarovartyom/13.embed"></iframe>
+<iframe width="800" height="600" frameborder="0" scrolling="no" src="//plot.ly/~makarovartyom/13.embed"></iframe>
 
 Dickey-Fuller criteria proves the resulted series can not be categorized as stationary.
 
@@ -358,7 +367,7 @@ To reach a maximum results we need use a method that handles sequently dependent
 
 It has a chain structure, consisted of cells and gates, that are able to remove or add information.
 
-![LSTM]({{ 'https://en.wikipedia.org/wiki/Long_short-term_memory#/media/File:The_LSTM_cell.png' | absolute_url }})
+<p><a href="https://commons.wikimedia.org/wiki/File:The_LSTM_cell.png#/media/File:The_LSTM_cell.png"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/The_LSTM_cell.png/1200px-The_LSTM_cell.png" alt="The LSTM cell.png"></a><br>By <a href="//commons.wikimedia.org/w/index.php?title=User:GChe&amp;action=edit&amp;redlink=1" class="new" title="User:GChe (page does not exist)">Guillaume Chevalier</a> - <span class="int-own-work" lang="en">Own work</span>, <a href="https://creativecommons.org/licenses/by/4.0" title="Creative Commons Attribution 4.0">CC BY 4.0</a>, <a href="https://commons.wikimedia.org/w/index.php?curid=71836793">Link</a></p>
 
 
 
