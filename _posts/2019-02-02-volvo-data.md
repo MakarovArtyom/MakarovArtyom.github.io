@@ -143,6 +143,8 @@ We willplotly to visualize the data, pandas package for data manupulation and ke
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 import plotly.plotly as py
 import plotly.graph_objs as go
+import colorlover as cl
+import cufflinks as cf
 init_notebook_mode(connected=True)
 
 # data manipulation libraries
@@ -193,10 +195,13 @@ Starting with listing down a number of variables affecting amount of sales:
 
 ### Time period effect
 
-On the graph we see the tendency of sales amount reaches its peak at the last month of each quarter. 
+On the graph we see the tendency of sales amount **reaches its peak** at the **last month of each quarter**. 
 
 <iframe width="800" height="600" frameborder="0" scrolling="no" src="//plot.ly/~makarovartyom/3.embed"></iframe>
 
+Besides, we see the positive trend per year with the **highest total sales results in 2018**.
+
+<iframe width="800" height="600" frameborder="0" scrolling="no" src="//plot.ly/~makarovartyom/5.embed"></iframe>
 
 
 
