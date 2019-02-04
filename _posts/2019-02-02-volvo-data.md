@@ -116,7 +116,10 @@ Continue with creating a table, we load sales_all.csv from storage, specifiyng t
 ![LSTM]({{ 'volvo_data/create_table.PNG' | absolute_url }})
 
 Finally, use SQL syntax to query a table:
-![LSTM]({{ 'volvo_data/query.PNG' | absolute_url }})
+ ```python
+ ![LSTM]({{ 'volvo_data/query.PNG' | absolute_url }})
+  ```
+
 
 
 
