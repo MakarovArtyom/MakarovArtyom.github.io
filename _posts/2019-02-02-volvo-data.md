@@ -195,7 +195,7 @@ Starting with listing down a number of variables affecting amount of sales:
 
 On the graph we see the tendency of sales amount reaches its peak at the last month of each quarter. 
 
-<iframe width="900" height="800" frameborder="0" scrolling="no" src="//plot.ly/~makarovartyom/3.embed"></iframe>
+<iframe width="700" height="600" frameborder="0" scrolling="no" src="//plot.ly/~makarovartyom/3.embed"></iframe>
 
 
 
