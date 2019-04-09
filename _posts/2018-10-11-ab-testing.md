@@ -233,7 +233,7 @@ we apply Beta function as the **conjugate prior**:<br>
 
  - $P(\theta|X) \approx \theta^{a-1+\sum_{i=1}^{N}{x_i}}(1-\theta)^{b-1+\sum_{i=1}^{N}(1-x_i)}$
  
-Operating Bbayesian method we can update our knowledge by using posterior distribution as the prior with samples increase, adding extra information.<br>
+Operating Bayesian method we can update our knowledge by using posterior distribution as the prior with samples increase, adding extra information.<br>
 Denote $a'$ = $a$ + #successes, $b'$ = $b$ + #failures, then new posterior can be expressed: 
  - $P(\theta|X) = Beta(a',b')$
  
